@@ -82,6 +82,14 @@ public partial class Enemy : CharacterBody3D
                 MoveAndSlide();
 				break;
 			case States.hunting:
+			 	var targetposhunting = NavigationAgent3D.GetNextLocation();
+                var directionhunting = GlobalPosition.DirectionTo(targetposhunting);
+                //GD.Print(directionhunting);
+                var velocityhunting = directionhunting * 2;
+				//NavigationAgent3D.SetVelocity(velocity);
+				NavigationAgent3D.SetTargetLocation(player.Position);
+                Velocity = velocityhunting;
+                MoveAndSlide();
 				break;
 			case States.waiting:
 				break;
@@ -114,6 +122,8 @@ public partial class Enemy : CharacterBody3D
 					if (p.NoiseLevel > 1)
 					{
 						GD.Print("I heard you Close");
+						currentState = States.hunting;
+						NavigationAgent3D.SetTargetLocation(player.Position);
 
 					}
 				}
@@ -124,6 +134,8 @@ public partial class Enemy : CharacterBody3D
 					if(p.LightLevel > .2)
 					{
                         GD.Print("I saw you CLOSE");
+						currentState = States.chasing;
+						NavigationAgent3D.SetTargetLocation(player.Position);
                     }
 				}
 				if (farSight)
@@ -131,6 +143,7 @@ public partial class Enemy : CharacterBody3D
                     if (p.LightLevel > .6)
                     {
                         GD.Print("I saw you FAR!");
+						currentState = States.chasing;
                     }
                 }
 				if (farSound)
@@ -138,6 +151,7 @@ public partial class Enemy : CharacterBody3D
 					if (p.NoiseLevel > 2)
 					{
                         GD.Print("I heard you FAR");
+						currentState = States.hunting;
                     }
 				}
 			}
