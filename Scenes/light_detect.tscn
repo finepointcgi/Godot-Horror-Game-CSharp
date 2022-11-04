@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://b4lpg7ga5770i"]
+[gd_scene load_steps=3 format=3 uid="uid://watfpc1ltllu"]
 
-[ext_resource type="Script" path="res://Levels/LightDetect.cs" id="1_lopcc"]
+[ext_resource type="Script" path="res://Scripts/LightDetect.cs" id="1_pwf6q"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_n7kfd"]
 
 [node name="Light Detect" type="Node3D"]
-script = ExtResource("1_lopcc")
+script = ExtResource("1_pwf6q")
 
 [node name="MeshInstance3d" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.00142581, -0.0811633, -0.0583994, 0.05, 0.05, -0.0707107, 0.0865908, -0.0302079, 0.0398687, 0, 0, 0)
@@ -13,13 +13,17 @@ layers = 524288
 mesh = SubResource("BoxMesh_n7kfd")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = -1
+anchor_right = 0.33
+anchor_bottom = 0.407
+offset_right = -163.16
+offset_bottom = -61.736
+stretch = true
 
 [node name="f" type="SubViewport" parent="SubViewportContainer"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(16, 16)
+size = Vector2i(217, 202)
 render_target_update_mode = 4
 
 [node name="Camera3d" type="Camera3D" parent="SubViewportContainer/f"]

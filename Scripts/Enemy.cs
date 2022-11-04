@@ -52,51 +52,58 @@ public partial class Enemy : CharacterBody3D
 		switch (currentState)
 		{
 			case States.patrol:
-                if (NavigationAgent3D.IsNavigationFinished())
-                {
+				if (NavigationAgent3D.IsNavigationFinished())
+				{
 					patrolTimer.Start();
 					currentState = States.waiting;
-                    return;
-                }
-                var targetpos = NavigationAgent3D.GetNextLocation();
-                var direction = GlobalPosition.DirectionTo(targetpos);
-                //GD.Print(direction);
-                var velocity = direction * 2;
-                //NavigationAgent3D.SetVelocity(velocity);
-				faceDirection(targetpos, delta);
-                Velocity = velocity;
-                MoveAndSlide();
-				if (playerInEarshotFar)
-				{
-					CheckForPlayer(playerInSightClose, playerInSightFar, playerInEarshotClose, playerInEarshotFar);
+					return;
 				}
+				moveTowaredsPoint(delta, 2);
 				break;
 			case States.chasing:
-                var targetposchase = NavigationAgent3D.GetNextLocation();
-                var directionchase = GlobalPosition.DirectionTo(targetposchase);
-                //GD.Print(directionchase);
-                var velocitychase = directionchase * NavigationAgent3D.MaxSpeed;
-				//NavigationAgent3D.SetVelocity(velocity);
-				NavigationAgent3D.SetTargetLocation(player.Position);
-                Velocity = velocitychase;
-                MoveAndSlide();
+				if (NavigationAgent3D.IsNavigationFinished())
+				{
+					GD.Print("Attacking!");
+					return;
+				}
+                    NavigationAgent3D.SetTargetLocation(player.Position);
+                moveTowaredsPoint(delta, NavigationAgent3D.MaxSpeed);
 				break;
 			case States.hunting:
-			 	var targetposhunting = NavigationAgent3D.GetNextLocation();
-                var directionhunting = GlobalPosition.DirectionTo(targetposhunting);
-                //GD.Print(directionhunting);
-                var velocityhunting = directionhunting * 2;
-				//NavigationAgent3D.SetVelocity(velocity);
-				NavigationAgent3D.SetTargetLocation(player.Position);
-                Velocity = velocityhunting;
-                MoveAndSlide();
+				if (NavigationAgent3D.IsNavigationFinished())
+				{
+					currentState = States.waiting;
+					patrolTimer.Start();
+					return;
+				}
+                moveTowaredsPoint(delta, 2);
 				break;
 			case States.waiting:
-				break;
+                if (playerInEarshotFar)
+                {
+                    CheckForPlayer(playerInSightClose, playerInSightFar, playerInEarshotClose, playerInEarshotFar);
+                }
+                break;
             default:
 				break;
 		}
 		
+	}
+
+	private void moveTowaredsPoint(double delta, float speed)
+	{
+		var targetpos = NavigationAgent3D.GetNextLocation();
+		var direction = GlobalPosition.DirectionTo(targetpos);
+		//GD.Print(direction);
+		var velocity = direction * speed;
+		//NavigationAgent3D.SetVelocity(velocity);
+		faceDirection(targetpos, delta);
+		Velocity = velocity;
+		MoveAndSlide();
+		if (playerInEarshotFar)
+		{
+			CheckForPlayer(playerInSightClose, playerInSightFar, playerInEarshotClose, playerInEarshotFar);
+		}
 	}
 
 	private void CheckForPlayer(bool closeSight, bool farSight, bool closeSound, bool farSound)
@@ -117,9 +124,11 @@ public partial class Enemy : CharacterBody3D
 			{
                 
                 Player p = s as Player;
+				//GD.Print(GlobalPosition.DistanceTo(p.GlobalPosition));
+				//GD.Print(p.NoiseLevel / GlobalPosition.DistanceTo(p.GlobalPosition));
 				if (closeSound)
 				{
-					if (p.NoiseLevel > 1)
+					if (p.NoiseLevel / GlobalPosition.DistanceTo(p.GlobalPosition) > 1)
 					{
 						GD.Print("I heard you Close");
 						currentState = States.hunting;
@@ -127,38 +136,39 @@ public partial class Enemy : CharacterBody3D
 
 					}
 				}
-                GD.Print(p.NoiseLevel);
-                GD.Print(p.LightLevel);
-				if (closeSight)
-				{
-					if(p.LightLevel > .2)
-					{
-                        GD.Print("I saw you CLOSE");
-						currentState = States.chasing;
-						NavigationAgent3D.SetTargetLocation(player.Position);
-                    }
-				}
-				if (farSight)
-				{
-                    if (p.LightLevel > .6)
-                    {
-                        GD.Print("I saw you FAR!");
-						currentState = States.chasing;
-                    }
-                }
+                
+				//if (closeSight)
+				//{
+				//	if(p.LightLevel > .2)
+				//	if(p.LightLevel > .2)
+				//	{
+    //                    GD.Print("I saw you CLOSE");
+				//		currentState = States.chasing;
+				//		NavigationAgent3D.SetTargetLocation(player.Position);
+    //                }
+				//}
+				//if (farSight)
+				//{
+    //                if (p.LightLevel > .6)
+    //                {
+    //                    GD.Print("I saw you FAR!");
+				//		currentState = States.chasing;
+    //                }
+    //            }
 				if (farSound)
 				{
-					if (p.NoiseLevel > 2)
+					if (p.NoiseLevel / GlobalPosition.DistanceTo(p.GlobalPosition) > 2)
 					{
                         GD.Print("I heard you FAR");
-						currentState = States.hunting;
+                        NavigationAgent3D.SetTargetLocation(player.Position);
+                        currentState = States.hunting;
                     }
 				}
 			}
 		}
 	}
 
-	private void faceDirection(Vector3 direction, double delta)
+	private void faceDirection(Vector3 direction, double delta)	
 	{
 		//GD.Print(direction);
 		Vector3 d = lastLookingDirection.Lerp(direction, .2f);

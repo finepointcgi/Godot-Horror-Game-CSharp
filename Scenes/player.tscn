@@ -1,7 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://bh2pbd6uakpro"]
+[gd_scene load_steps=12 format=3 uid="uid://bgk73hlkuijtd"]
 
-[ext_resource type="Script" path="res://Player.cs" id="1_kdrvw"]
-[ext_resource type="PackedScene" uid="uid://b4lpg7ga5770i" path="res://light_detect.tscn" id="2_u51h5"]
+[ext_resource type="Script" path="res://Scripts/Player.cs" id="1_kdrvw"]
+[ext_resource type="PackedScene" uid="uid://watfpc1ltllu" path="res://Scenes/light_detect.tscn" id="2_u51h5"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_etn12"]
 
