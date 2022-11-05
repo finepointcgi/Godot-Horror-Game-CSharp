@@ -8,15 +8,15 @@ public partial class Surface : CSGBox3D
 	[Export]
 	public int SoundValue;
 	[Export]
-	public Godot.Collections.Array<AudioStream> WalkStreamWAV;
+	public AudioStream WalkStreamWAV;
     [Export]
-    public Godot.Collections.Array<AudioStream> JumpLandSteamWAV;
+    public AudioStream JumpLandSteamWAV;
     [Export]
-    public Godot.Collections.Array<AudioStream> JumpStreamWAV;
+    public AudioStream JumpStreamWAV;
     [Export]
-    public Godot.Collections.Array<AudioStream> RunStreamWAV;
+    public AudioStream RunStreamWAV;
     [Export]
-    public Godot.Collections.Array<AudioStream> SneakStreamWAV;
+    public AudioStream SneakStreamWAV;
     public override void _Ready()
 	{
 	}

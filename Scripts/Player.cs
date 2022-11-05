@@ -71,17 +71,7 @@ public partial class Player : CharacterBody3D
 
 		// Handle Jump.
 		if (IsOnFloor())
-		{
-			
-			if (WasInAirLastFrame)
-			{
-				
-                AudioManager.playerAudioStream.Stream = surface.JumpLandSteamWAV[0];
-                AudioManager.playerAudioStream.Play();
-				GD.Print("playing audio");
-                NoiseLevel = surface.SoundValue;
-            }
-              
+		{               
 			velocity.y = 0;
 			if (Input.IsActionJustPressed("ui_accept"))
 				velocity.y = JumpVelocity;
@@ -142,14 +132,15 @@ public partial class Player : CharacterBody3D
             velocity.x = Mathf.Lerp(lastVelocity.x, direction.x * speed, acceleration);
 			velocity.z = Mathf.Lerp(lastVelocity.z, direction.z * speed, acceleration);
 			lastVelocity = velocity;
-            if (!AudioManager.playerAudioStream.Playing && checkVelocityAboveValue(new Vector2(velocity.x, velocity.z), 1))
+            if (!GetNode<AudioStreamPlayer>("Footsteps").Playing && checkVelocityAboveValue(new Vector2(velocity.x, velocity.z), 1))
 			{
                 Random r = new Random();
 				GD.Print("playing Audio");
-				if (surface != null)
+				if (surface != null && IsOnFloor())
 				{
-					AudioManager.playerAudioStream.Stream = AudioManager.getNonLastAudioStream(surface.WalkStreamWAV);
-                    AudioManager.playerAudioStream.Play();
+					GD.Print(AudioManagerTwo.manager.Sounds[surface.GetMeta("SurfaceType").ToString()]);
+					GetNode<AudioStreamPlayer>("Footsteps").Stream = AudioManagerTwo.manager.Sounds[surface.GetMeta("SurfaceType").ToString()].WalkStreamWAV;
+                    GetNode<AudioStreamPlayer>("Footsteps").Play();
 					NoiseLevel = surface.SoundValue;
 				}
 			}
@@ -157,9 +148,9 @@ public partial class Player : CharacterBody3D
 		else
 		{
 
-			if (AudioManager.playerAudioStream.IsPlaying())
+			if (GetNode<AudioStreamPlayer>("Footsteps").IsPlaying() && IsOnFloor())
 			{
-				AudioManager.playerAudioStream.Stop();
+				GetNode<AudioStreamPlayer>("Footsteps").Stop();
 
             }
             velocity.x = Mathf.MoveToward(Velocity.x, 0, speed);
@@ -167,6 +158,26 @@ public partial class Player : CharacterBody3D
             lastVelocity = velocity;
 			NoiseLevel = 0;			
         }
+
+		// Handle Jump.
+		if (IsOnFloor())
+		{
+			
+			if (WasInAirLastFrame)
+			{
+				if(surface != null){
+					GetNode<AudioStreamPlayer>("Jump").Stream = AudioManagerTwo.manager.Sounds[surface.GetMeta("SurfaceType").ToString()].JumpLandSteamWAV;
+					 
+					GetNode<AudioStreamPlayer>("Jump").Play();
+					GD.Print("playing audio");
+					NoiseLevel = surface.SoundValue;
+				}
+            }
+              
+			velocity.y = 0;
+			if (Input.IsActionJustPressed("ui_accept"))
+				velocity.y = JumpVelocity;
+		}
 
 		Velocity = velocity;
         if (IsOnFloor())

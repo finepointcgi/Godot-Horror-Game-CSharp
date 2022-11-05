@@ -336,4 +336,6 @@ light_energy = 0.0
 [node name="LightDetect" parent="." instance=ExtResource("2_u51h5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.09444, 0)
 
+[node name="Jump" type="AudioStreamPlayer" parent="."]
+
 [node name="Footsteps" type="AudioStreamPlayer" parent="."]

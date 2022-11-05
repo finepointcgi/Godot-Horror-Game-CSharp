@@ -12,10 +12,10 @@ namespace GodotHorrorGameCSharp.Scripts
         public static int lastPlayedAudio;
         public static AudioStreamPlayer playerAudioStream;
         public static Random random = new Random();
-        public static AudioStream getNonLastAudioStream(Godot.Collections.Array<AudioStream> audioStreams)
+        public static AudioStream getNonLastAudioStream(AudioStream audioStreams)
         {
             //lastPlayedAudio = getUniqueRandomValue(0, audioStreams.Count);
-            return audioStreams[0];
+            return audioStreams;
         }
 
         public static int getUniqueRandomValue(int startValue, int maxValue)
