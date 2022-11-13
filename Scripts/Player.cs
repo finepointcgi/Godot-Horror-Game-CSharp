@@ -6,6 +6,10 @@ using Godot;
 public partial class Player : CharacterBody3D
 {
 	/// <summary>
+	/// A Global Refrence To The Player
+	/// </summary>
+	public static Player player;
+	/// <summary>
 	/// How fast the player moves
 	/// </summary>
 	public const float Speed = 5.0f;
@@ -37,30 +41,82 @@ public partial class Player : CharacterBody3D
 	/// The current light value of the player
 	/// </summary>
 	public double LightValue;
+	/// <summary>
+	/// The noise value the user has when they are moving around
+	/// </summary>
+	public double NoiseValue;
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	/// <summary>
 	/// The gravity of the player
 	/// </summary>
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
-
-	public override void _Ready()
+	/// <summary>
+	/// The audio player used for the players footsteps
+	/// </summary>
+	private AudioStreamPlayer footAudioPlayer;
+	/// <summary>
+	/// The audio player used for the players jump sounds
+	/// </summary>
+	private AudioStreamPlayer jumpAudioPlayer;
+	/// <summary>
+	/// If the player was in air last frame
+	/// </summary>
+	private bool wasInAirLastFrame;
+	/// <summary>
+	/// The initial surface object used when surface is null
+	/// </summary>
+	private Surface surfaceInit;
+    public override void _Ready()
 	{
+		player = this;
 		base._Ready();
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 		LightDetectObject = GetNode<LightDetect>("LightDetect");
-	}
+		surfaceInit = new Surface();
+		surfaceInit.SurfaceResource = ResourceLoader.Load<SurfaceResource>("res://Sounds/Wood.tres");
+
+		footAudioPlayer = GetNode<AudioStreamPlayer>("Footsteps");
+		jumpAudioPlayer = GetNode<AudioStreamPlayer>("Jump");
+    }
 
 	public override void _PhysicsProcess(double delta)
 	{
+		NoiseValue = 0;
 		Vector3 velocity = Velocity;
+        PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+        var surfaceResult = spaceState.IntersectRay(new PhysicsRayQueryParameters3D() { 
+			From = new Vector3(Position.x, Position.y + .5f, Position.z), 
+			To = new Vector3(Position.x, Position.y - 1, Position.z), 
+			Exclude = new Godot.Collections.Array { this } });
+		Surface surface = surfaceInit;
+		if (surfaceResult.Count > 0)
+		{
+			if (surfaceResult.ContainsKey("collider"))
+			{
+				
+                if (surfaceResult["collider"].AsGodotObject() is Surface)
+				{
+					surface = (Surface)surfaceResult["collider"];
 
+                }
+			}
+		}
 		// Add the gravity.
-		if (!IsOnFloor())
+            if (!IsOnFloor())
 			velocity.y -= gravity * (float)delta;
 
 		// Handle Jump.
-		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
-			velocity.y = JumpVelocity;
+		if (IsOnFloor())
+		{
+			if (wasInAirLastFrame)
+			{
+				jumpAudioPlayer.Stream = surface.SurfaceResource.JumpLandStreamWAV;
+				jumpAudioPlayer.Play();
+				NoiseValue = surface.SurfaceResource.JumpLandNoiseLevel;
+			}
+			if (Input.IsActionJustPressed("ui_accept"))
+				velocity.y = JumpVelocity;
+		}
 
 		LightValue = LightDetectObject.LightLevel;
 		//GD.Print(LightValue);
@@ -82,7 +138,6 @@ public partial class Player : CharacterBody3D
 		{
 			if (IsCrouched)
 			{
-				PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
 				var result = spaceState.IntersectRay(new PhysicsRayQueryParameters3D() { From = Position, To = new Vector3(Position.x, Position.y + 2, Position.z), Exclude = new Godot.Collections.Array { this } });
 				if (result.Count <= 0)
 				{
@@ -108,14 +163,47 @@ public partial class Player : CharacterBody3D
 		{
 			velocity.x = direction.x * speed;
 			velocity.z = direction.z * speed;
+
+			if (IsOnFloor()) {
+				if (IsCrouched)
+				{
+					NoiseValue = surface.SurfaceResource.NoiseLevel / 3;
+				}
+				else
+				{
+                    NoiseValue = surface.SurfaceResource.NoiseLevel;
+                }
+
+				if (!footAudioPlayer.Playing)
+				{
+					if (IsCrouched)
+					{
+						footAudioPlayer.Stream = surface.SurfaceResource.SneakStreamWAV;
+					}
+					else
+					{
+						footAudioPlayer.Stream = surface.SurfaceResource.WalkStreamWAV;
+					}
+					footAudioPlayer.Play();
+
+				} else if (!IsOnFloor())
+				{
+					footAudioPlayer.Stop();
+				}
+			}
 		}
 		else
 		{
 			velocity.x = Mathf.MoveToward(Velocity.x, 0, speed);
 			velocity.z = Mathf.MoveToward(Velocity.z, 0, speed);
+			if (footAudioPlayer.Playing)
+			{
+				footAudioPlayer.Stop();
+			}
 		}
 
 		Velocity = velocity;
+		wasInAirLastFrame = !IsOnFloor();
 		MoveAndSlide();
 	}
 

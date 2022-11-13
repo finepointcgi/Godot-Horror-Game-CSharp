@@ -77,8 +77,38 @@ public partial class Enemy : CharacterBody3D
 	/// The players camera
 	/// </summary>
 	private Node3D playerCamera;
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	/// <summary>
+	/// Detects player close sound value
+	/// </summary>
+	[Export]
+	private float CloseSoundDetect = .4f;
+    /// <summary>
+    /// Detects player far sound value
+    /// </summary>
+    [Export]
+	private float FarSoundDetect = .6f;
+    /// <summary>
+    /// Detects player close light value
+    /// </summary>
+    [Export]
+	private float CloseLightDetect = .3f;
+    /// <summary>
+    /// Detects player far light value
+    /// </summary>
+    [Export]
+    private float FarLightDetect = .5f;
+    /// <summary>
+    /// Detects player close crouched light value
+    /// </summary>
+    [Export]
+    private float CloseCrouchedLightDetect = .3f;
+    /// <summary>
+    /// Detects player far crouched light value
+    /// </summary>
+    [Export]
+    private float FarCrouchedLightDetect = .6f;
+    // Called when the node enters the scene tree for the first time.
+    public override void _Ready()
 	{
 
 		head = GetNode<Node3D>("Head");
@@ -130,7 +160,8 @@ public partial class Enemy : CharacterBody3D
 				moveTowardsPoint(delta, patrolSpeed);
 				break;
 			case States.Waiting:
-				break;
+                checkForPlayer();
+                break;
 			default:
 				break;
 		}
@@ -167,6 +198,8 @@ public partial class Enemy : CharacterBody3D
 			Exclude = new Godot.Collections.Array { this }
 		});
 
+		bool playerBehindWall = true;
+
 		if (result.Keys.Count > 0)
 		{
 			Node3D node = (Node3D)result["collider"];
@@ -174,32 +207,16 @@ public partial class Enemy : CharacterBody3D
 			if (node is Player)
 			{
 				Player p = node as Player;
-				if (playerInEarshotClose)
-				{
-					CurrentState = States.Chasing;
 
-					GD.Print("Player In Earshot Close");
-				}
-
-				if (playerInEarshotFar)
-				{
-					if (!p.IsCrouched)
-					{
-						CurrentState = States.Hunting;
-						NavigationAgent.SetTargetLocation(player.GlobalPosition);
-						GD.Print("Player is hunted");
-					}
-
-				}
-
-				if (playerInSightClose && (p.LightValue > .3f || (p.IsCrouched && p.LightValue > .4f)))
+				playerBehindWall = false;
+				if (playerInSightClose && (p.LightValue > CloseLightDetect || (p.IsCrouched && p.LightValue > CloseCrouchedLightDetect)))
 				{
 
 					CurrentState = States.Chasing;
 					GD.Print("Player In Sight Close");
 				}
 				GD.Print(p.LightValue);
-				if (playerInSightFar && (p.LightValue > .5f || (p.IsCrouched && p.LightValue > .6f)))
+				if (playerInSightFar && (p.LightValue > FarLightDetect || (p.IsCrouched && p.LightValue > FarCrouchedLightDetect)))
 				{
 					CurrentState = States.Hunting;
 					NavigationAgent.SetTargetLocation(player.GlobalPosition);
@@ -207,7 +224,29 @@ public partial class Enemy : CharacterBody3D
 				}
 			}
 		}
-	}
+
+        if (playerInEarshotClose && (playerBehindWall ? 
+			Player.player.NoiseValue / 2 : 
+			Player.player.NoiseValue) / GlobalPosition.DistanceTo(Player.player.GlobalPosition) > CloseSoundDetect)
+        {
+            CurrentState = States.Chasing;
+
+            GD.Print("Player In Earshot Close");
+        }
+
+        if (playerInEarshotFar && (playerBehindWall ?
+            Player.player.NoiseValue / 2 :
+            Player.player.NoiseValue) / GlobalPosition.DistanceTo(Player.player.GlobalPosition) > FarSoundDetect)
+        {
+            if (!Player.player.IsCrouched)
+            {
+                CurrentState = States.Hunting;
+                NavigationAgent.SetTargetLocation(player.GlobalPosition);
+                GD.Print("Player is hunted");
+            }
+
+        }
+    }
 
 	/// <summary>
 	/// Signal for wait timer for patroling.

@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Godot Horror Game CSharp": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\FinepointCGI\\Downloads\\Godot_v4.0-beta3_mono_win64\\Godot_v4.0-beta3_mono_win64.exe",
+      "commandLineArgs": "--path. --verbose",
+      "workingDirectory": ".",
+      "nativeDebugging": true
+    }
+  }
+}
