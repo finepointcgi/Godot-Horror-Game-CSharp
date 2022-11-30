@@ -266,46 +266,46 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.003
 [node name="Celling13" parent="Level BSP/Hallway" instance=ExtResource("3_rs687")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.00648, 0, 3.00389)
 
-[node name="Door2" type="CSGBox3D" parent="."]
+[node name="Door2" type="CSGBox3D" parent="Level BSP"]
 transform = Transform3D(-1, 0, 1.19364e-07, 0, 1, 0, -1.19364e-07, 0, -1, -1.73189, 1.09711, 1.51163)
 use_collision = true
 size = Vector3(0.12844, 1.99563, 0.891133)
 
-[node name="Door3" type="CSGBox3D" parent="."]
+[node name="Door3" type="CSGBox3D" parent="Level BSP"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.0142, 1.09711, 3.00172)
 use_collision = true
 size = Vector3(0.12844, 1.99563, 0.891133)
 
-[node name="Player" parent="." instance=ExtResource("5_13u15")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 4.73474, 0.0599114, -6.69089)
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
+[node name="OmniLight3D" type="OmniLight3D" parent="Level BSP"]
 transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, 4.44029, 2.00412, 3.7853)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
-[node name="OmniLight3D4" type="OmniLight3D" parent="."]
+[node name="OmniLight3D4" type="OmniLight3D" parent="Level BSP"]
 transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, -0.566193, 2.00412, 3.7853)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
-[node name="OmniLight3D5" type="OmniLight3D" parent="."]
+[node name="OmniLight3D5" type="OmniLight3D" parent="Level BSP"]
 transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, -5.57268, 2.00412, 3.7853)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
-[node name="OmniLight3D2" type="OmniLight3D" parent="."]
+[node name="OmniLight3D2" type="OmniLight3D" parent="Level BSP"]
 transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, 2.98103, 1.52319, -4.5811)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
-[node name="OmniLight3D3" type="OmniLight3D" parent="."]
+[node name="OmniLight3D3" type="OmniLight3D" parent="Level BSP"]
 transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, -2.59155, 1.46361, 1.44027)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Level BSP"]
 transform = Transform3D(0.997008, -0.0239608, -0.0894231, 0.00332459, -0.957288, 0.293571, -0.0925179, -0.292611, -0.953108, -2.08472, 1.68513, -3.35362)
 light_color = Color(0.619608, 0.705882, 0.819608, 1)
 light_energy = 0.256
 shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("5_13u15")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 4.73474, 0.0599114, -6.69089)
