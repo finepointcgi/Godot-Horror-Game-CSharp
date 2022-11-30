@@ -1,8 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://cjmg0hfbgrrm3"]
+[gd_scene load_steps=4 format=3 uid="uid://cjmg0hfbgrrm3"]
 
 [ext_resource type="Script" path="res://Scripts/LightDetect.cs" id="1_qcrtp"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s41da"]
+
 [sub_resource type="SphereMesh" id="SphereMesh_ouisj"]
+material = SubResource("StandardMaterial3D_s41da")
 radial_segments = 6
 rings = 2
 

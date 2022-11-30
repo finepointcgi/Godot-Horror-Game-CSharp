@@ -6,6 +6,18 @@ using Godot;
 public partial class Player : CharacterBody3D
 {
 	/// <summary>
+	/// The states that are open to the player to use.
+	/// </summary>
+	enum states
+	{
+		walking,
+		sneaking,
+		crouching,
+		inAir,
+		standing,
+		jumping
+	}
+	/// <summary>
 	/// A Global Refrence To The Player
 	/// </summary>
 	public static Player player;
@@ -66,6 +78,15 @@ public partial class Player : CharacterBody3D
 	/// The initial surface object used when surface is null
 	/// </summary>
 	private Surface surfaceInit;
+	/// <summary>
+	/// The current state the player is in
+	/// </summary>
+	private states currentState = states.standing;
+	/// <summary>
+	/// The players animation player used to play animations
+	/// </summary>
+	private AnimationPlayer playerAnimationPlayer;
+
     public override void _Ready()
 	{
 		player = this;
@@ -77,134 +98,208 @@ public partial class Player : CharacterBody3D
 
 		footAudioPlayer = GetNode<AudioStreamPlayer>("Footsteps");
 		jumpAudioPlayer = GetNode<AudioStreamPlayer>("Jump");
+		playerAnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
     }
 
 	public override void _PhysicsProcess(double delta)
 	{
-		NoiseValue = 0;
-		Vector3 velocity = Velocity;
-        PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
-        var surfaceResult = spaceState.IntersectRay(new PhysicsRayQueryParameters3D() { 
-			From = new Vector3(Position.x, Position.y + .5f, Position.z), 
-			To = new Vector3(Position.x, Position.y - 1, Position.z), 
-			Exclude = new Godot.Collections.Array { this } });
-		Surface surface = surfaceInit;
-		if (surfaceResult.Count > 0)
-		{
-			if (surfaceResult.ContainsKey("collider"))
-			{
-				
-                if (surfaceResult["collider"].AsGodotObject() is Surface)
-				{
-					surface = (Surface)surfaceResult["collider"];
-
-                }
-			}
-		}
-		// Add the gravity.
-            if (!IsOnFloor())
-			velocity.y -= gravity * (float)delta;
-
-		// Handle Jump.
-		if (IsOnFloor())
-		{
-			if (wasInAirLastFrame)
-			{
-				jumpAudioPlayer.Stream = surface.SurfaceResource.JumpLandStreamWAV;
-				jumpAudioPlayer.Play();
-				NoiseValue = surface.SurfaceResource.JumpLandNoiseLevel;
-			}
-			if (Input.IsActionJustPressed("ui_accept"))
-				velocity.y = JumpVelocity;
-		}
-
+		wasInAirLastFrame = !IsOnFloor();
+		Vector3 velocity = getInput();
 		LightValue = LightDetectObject.LightLevel;
-		//GD.Print(LightValue);
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
-		Vector3 direction = (Transform.basis * new Vector3(inputDir.x, 0, inputDir.y)).Normalized();
-		float speed = Speed;
-		if (Input.IsActionPressed("Crouch"))
-		{
-			if (!IsCrouched)
-			{
-				GetNode<AnimationPlayer>("AnimationPlayer").Play("Crouch");
-				IsCrouched = true;
-			}
 
-		}
-		else
-		{
-			if (IsCrouched)
-			{
-				var result = spaceState.IntersectRay(new PhysicsRayQueryParameters3D() { From = Position, To = new Vector3(Position.x, Position.y + 2, Position.z), Exclude = new Godot.Collections.Array { this } });
-				if (result.Count <= 0)
-				{
-					GetNode<AnimationPlayer>("AnimationPlayer").Play("UnCrouch");
-					IsCrouched = false;
+		handleSound(getSurface());
+		handleAnimation();
+		handleMovement(velocity, delta);
+	}
+	/// <summary>
+	/// Handles all the animations the player uses. Based off of state it will run though its varous animations.
+	/// </summary>
+	private void handleAnimation()
+	{
+        if (currentState == states.sneaking || currentState == states.crouching)
+        {
+            if (!IsCrouched)
+            {
+                playerAnimationPlayer.Play("Crouch");
+                IsCrouched = true;
+            }
+
+        }
+        else
+        {
+            if (IsCrouched)
+            {
+				PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+                var result = spaceState.IntersectRay(
+					new PhysicsRayQueryParameters3D() { 
+						From = Position, 
+						To = new Vector3(Position.x, Position.y + 2, Position.z), 
+						Exclude = new Godot.Collections.Array { this } 
+					});
+
+                if (result.Count <= 0)
+                {
+                   playerAnimationPlayer.PlayBackwards("Crouch");
+                    IsCrouched = false;
 				}
+				else
+				{
+					currentState = states.sneaking;
+				}
+            }
+        }
+    }
+	/// <summary>
+	/// Handles all the sound the player generates from sound effects 
+	/// from walking to the noise values it produces when the player is moving
+	/// </summary>
+	/// <param name="surface">The current surface the player is on</param>
+	private void handleSound(Surface surface)
+	{
+		NoiseValue = 0;
+		if (currentState == states.walking)
+		{
+			NoiseValue = surface.SurfaceResource.NoiseLevel;
+			if (!footAudioPlayer.Playing)
+			{
+				footAudioPlayer.Stream = surface.SurfaceResource.WalkStreamWAV;
+				footAudioPlayer.Play();
 			}
 		}
-		if (IsCrouched)
+
+        if (currentState == states.sneaking)
+        {
+            NoiseValue = surface.SurfaceResource.NoiseLevel / 3;
+            if (!footAudioPlayer.Playing)
+            {
+                footAudioPlayer.Stream = surface.SurfaceResource.SneakStreamWAV;
+                footAudioPlayer.Play();
+            }
+        }
+
+		if(currentState == states.inAir && wasInAirLastFrame)
+		{
+			NoiseValue = surface.SurfaceResource.JumpLandNoiseLevel;
+			jumpAudioPlayer.Stream = surface.SurfaceResource.JumpLandStreamWAV;
+			jumpAudioPlayer.Play();
+		}
+
+		if(currentState == states.standing || currentState == states.crouching)
+		{
+			if (footAudioPlayer.Playing)
+				footAudioPlayer.Stop();
+		}
+    }
+	/// <summary>
+	/// Handles the movement of the player. It will allow the player to move and sneak.
+	/// </summary>
+	/// <param name="direction">Direction the player is moving</param>
+	/// <param name="delta">The overall Godot Delta time</param>
+	private void handleMovement(Vector3 direction, double delta)
+	{
+		Vector3 velocity = Velocity;
+		float speed = Speed;
+		if (currentState == states.sneaking)
 			speed = CrouchedSpeed;
 
-		if (Input.IsActionJustPressed("Flashlight"))
-		{
-			if (FlashlightOut)
-				GetNode<AnimationPlayer>("AnimationPlayer").Play("FlashlightHide");
-			else
-				GetNode<AnimationPlayer>("AnimationPlayer").Play("Flashlight");
-
-			FlashlightOut = !FlashlightOut;
-		}
+		if (currentState == states.jumping)
+			velocity.y = JumpVelocity;
 
 		if (direction != Vector3.Zero)
 		{
 			velocity.x = direction.x * speed;
 			velocity.z = direction.z * speed;
-
-			if (IsOnFloor()) {
-				if (IsCrouched)
-				{
-					NoiseValue = surface.SurfaceResource.NoiseLevel / 3;
-				}
-				else
-				{
-                    NoiseValue = surface.SurfaceResource.NoiseLevel;
-                }
-
-				if (!footAudioPlayer.Playing)
-				{
-					if (IsCrouched)
-					{
-						footAudioPlayer.Stream = surface.SurfaceResource.SneakStreamWAV;
-					}
-					else
-					{
-						footAudioPlayer.Stream = surface.SurfaceResource.WalkStreamWAV;
-					}
-					footAudioPlayer.Play();
-
-				} else if (!IsOnFloor())
-				{
-					footAudioPlayer.Stop();
-				}
-			}
 		}
 		else
 		{
 			velocity.x = Mathf.MoveToward(Velocity.x, 0, speed);
 			velocity.z = Mathf.MoveToward(Velocity.z, 0, speed);
-			if (footAudioPlayer.Playing)
-			{
-				footAudioPlayer.Stop();
-			}
+		}
+        // Add the gravity.
+        if (!IsOnFloor())
+            velocity.y -= gravity * (float)delta;
+		Velocity = velocity;
+		MoveAndSlide();
+    }
+	/// <summary>
+	/// The main switcher between states. It will take in user inputs and define the state that the player is in.
+	/// </summary>
+	/// <returns>The direction the player is moving in if any</returns>
+	private Vector3 getInput()
+	{
+        Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
+        Vector3 direction = (Transform.basis * new Vector3(inputDir.x, 0, inputDir.y)).Normalized();
+        
+		if (Input.IsActionJustPressed("Flashlight"))
+			handleFlashlight();
+
+		if(direction != Vector3.Zero)
+		{
+			if (Input.IsActionPressed("Crouch"))
+				currentState = states.sneaking;
+			else
+				currentState = states.walking;
+			
+		}
+		else
+		{
+            if (Input.IsActionPressed("Crouch"))
+                currentState = states.crouching;
+            else
+                currentState = states.standing;
+            
+        }
+
+		if(Input.IsActionJustPressed("Jump") && IsOnFloor())
+		{
+			currentState = states.jumping;
+		}else if (!IsOnFloor())
+		{
+			currentState = states.inAir;
 		}
 
-		Velocity = velocity;
-		wasInAirLastFrame = !IsOnFloor();
-		MoveAndSlide();
+		return direction;
+    }
+/// <summary>
+/// Handles the flashlight logic. this will show the flashlight if hidden and hide if flashlight is active.
+/// </summary>
+	private void handleFlashlight()
+	{
+		if (FlashlightOut)
+			GetNode<AnimationPlayer>("AnimationPlayer").Play("FlashlightHide");
+		else
+			GetNode<AnimationPlayer>("AnimationPlayer").Play("Flashlight");
+
+		FlashlightOut = !FlashlightOut;
+	}
+	/// <summary>
+	/// Returns the surface object under the player
+	/// </summary>
+	/// <returns>Surface object that is currently under the player</returns>
+	private Surface getSurface()
+	{
+		Surface surface = surfaceInit;
+        PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+		var surfaceResult = spaceState.IntersectRay(new PhysicsRayQueryParameters3D()
+		{
+			From = new Vector3(Position.x, Position.y + .5f, Position.z),
+			To = new Vector3(Position.x, Position.y - 1, Position.z),
+			Exclude = new Godot.Collections.Array { this }
+		});
+		surface = surfaceInit;
+		if (surfaceResult.Count > 0)
+		{
+			if (surfaceResult.ContainsKey("collider"))
+			{
+
+				if (surfaceResult["collider"].AsGodotObject() is Surface)
+				{
+					surface = (Surface)surfaceResult["collider"];
+
+				}
+			}
+		}
+		return surface;
 	}
 
 	public override void _Input(InputEvent @event)
