@@ -1,16 +1,18 @@
-[gd_scene load_steps=12 format=3 uid="uid://bgk73hlkuijtd"]
+[gd_scene load_steps=14 format=3 uid="uid://c3i8poarpae43"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_kdrvw"]
-[ext_resource type="PackedScene" uid="uid://watfpc1ltllu" path="res://Scenes/light_detect.tscn" id="2_u51h5"]
+[ext_resource type="PackedScene" uid="uid://cjmg0hfbgrrm3" path="res://Scenes/LightDetect.tscn" id="2_kmut6"]
+[ext_resource type="PackedScene" uid="uid://6r38f2bb202o" path="res://Models/Lantern.blend" id="2_onywc"]
+[ext_resource type="AudioStream" uid="uid://b8odt23skabu" path="res://Sounds/FootstepsOnConcrete.wav" id="4_ui01e"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_etn12"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ky38i"]
-radius = 0.50612
+radius = 0.39
 height = 1.9517
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_qdxos"]
-radius = 0.50612
+radius = 0.39
 height = 1.02378
 
 [sub_resource type="Animation" id="Animation_ms22b"]
@@ -304,7 +306,7 @@ _data = {
 "UnCrouch": SubResource("Animation_o7xfw")
 }
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_kdrvw")
 
 [node name="MeshInstance3d" type="MeshInstance3D" parent="."]
@@ -322,7 +324,6 @@ shape = SubResource("CapsuleShape3D_qdxos")
 
 [node name="Camera3d" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56456, 0)
-cull_mask = 524287
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -333,9 +334,13 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.419442, 1.33967, -1.10128)
 light_energy = 0.0
 
-[node name="LightDetect" parent="." instance=ExtResource("2_u51h5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.09444, 0)
+[node name="Lantern" parent="OmniLight3d" instance=ExtResource("2_onywc")]
+transform = Transform3D(0.159746, 0, 0, 0, 0.159746, 0, 0, 0, 0.159746, 0, -0.572936, 0)
 
-[node name="Jump" type="AudioStreamPlayer" parent="."]
+[node name="LightDetect" parent="." instance=ExtResource("2_kmut6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Footsteps" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_ui01e")
+
+[node name="Jump" type="AudioStreamPlayer" parent="."]

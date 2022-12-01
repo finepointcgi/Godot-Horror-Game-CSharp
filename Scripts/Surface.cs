@@ -1,28 +1,13 @@
 using Godot;
 using System;
-using System.Collections.Generic;
-
-public partial class Surface : CSGBox3D
+/// <summary>
+/// The main surface refrence class
+/// </summary>
+public partial class Surface : CSGMesh3D
 {
-	// Called when the node enters the scene tree for the first time.
+	/// <summary>
+	/// Holds the resource used to determine the surface type
+	/// </summary>
 	[Export]
-	public int SoundValue;
-	[Export]
-	public AudioStream WalkStreamWAV;
-    [Export]
-    public AudioStream JumpLandSteamWAV;
-    [Export]
-    public AudioStream JumpStreamWAV;
-    [Export]
-    public AudioStream RunStreamWAV;
-    [Export]
-    public AudioStream SneakStreamWAV;
-    public override void _Ready()
-	{
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
+	public SurfaceResource SurfaceResource { get; set; }
 }

@@ -1,259 +1,346 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// The Main enemy class
+/// </summary>
 public partial class Enemy : CharacterBody3D
 {
-    public enum States
+	/// <summary>
+	/// The States alv to the Enemy
+	/// </summary>
+	public enum States
 	{
-		patrol,
-		chasing,
-		hunting,
-		waiting
-
+		Patrol,
+		Chasing,
+		Hunting,
+		Waiting
 	}
-    public States currentState;
-    public const float Speed = 5.0f;
-	public const float JumpVelocity = 4.5f;
-
-	// Get the gravity from the project settings to be synced with RigidBody nodes.
-	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
-	NavigationAgent3D NavigationAgent3D;
-	private List<Marker3D> waypoints = new();
-	private int waypointIndex = 0;
+	/// <summary>
+	/// The Enemies Current State
+	/// </summary>
+	public States CurrentState;
+	/// <summary>
+	/// When patrolling how fast the enemy should move to each point
+	/// </summary>
+	private float patrolSpeed = 2;
+	/// <summary>
+	/// When chasing the player how fast to move 
+	/// </summary>
+	private float chaseSpeed = 3;
+	/// <summary>
+	/// The patrol timer used to determine wait time at each patrol point
+	/// </summary>
 	private Timer patrolTimer;
+	/// <summary>
+	/// The navigation agent used for patroling and chasing
+	/// </summary>
+	public NavigationAgent3D NavigationAgent;
+	/// <summary>
+	/// A list of waypoints used for patroling
+	/// </summary>
+	private List<Marker3D> waypoints = new List<Marker3D>();
+	/// <summary>
+	/// The current waypoint index offset
+	/// </summary>
+	private int waypointIndex;
+	/// <summary>
+	/// Where the last looking direction of the enemy was
+	/// </summary>
 	private Vector3 lastLookingDirection;
-
+	/// <summary>
+	/// If player is in earshot far
+	/// </summary>
 	private bool playerInEarshotFar;
+	/// <summary>
+	/// If player is in earshot close
+	/// </summary>
 	private bool playerInEarshotClose;
+	/// <summary>
+	/// If player is in sight far
+	/// </summary>
 	private bool playerInSightFar;
+	/// <summary>
+	/// If the player is in close sight
+	/// </summary>
 	private bool playerInSightClose;
-
+	/// <summary>
+	/// The player
+	/// </summary>
 	private Player player;
+	/// <summary>
+	/// The enemys head object
+	/// </summary>
+	private Node3D head;
+	/// <summary>
+	/// The players camera
+	/// </summary>
+	private Node3D playerCamera;
+	/// <summary>
+	/// Detects player close sound value
+	/// </summary>
+	[Export]
+	private float CloseSoundDetect = .4f;
+    /// <summary>
+    /// Detects player far sound value
+    /// </summary>
+    [Export]
+	private float FarSoundDetect = .6f;
+    /// <summary>
+    /// Detects player close light value
+    /// </summary>
+    [Export]
+	private float CloseLightDetect = .3f;
+    /// <summary>
+    /// Detects player far light value
+    /// </summary>
+    [Export]
+    private float FarLightDetect = .5f;
+    /// <summary>
+    /// Detects player close crouched light value
+    /// </summary>
+    [Export]
+    private float CloseCrouchedLightDetect = .3f;
+    /// <summary>
+    /// Detects player far crouched light value
+    /// </summary>
+    [Export]
+    private float FarCrouchedLightDetect = .6f;
+    // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
-		base._Ready();
-		NavigationAgent3D = GetNode<NavigationAgent3D>("NavigationAgent3d");
-		NavigationAgent3D.Connect("velocity_computed", new Callable(this, "onVelocityComputed"));
-		
-		currentState = States.patrol;
-		NavigationAgent3D.SetTargetLocation(GetNode<Marker3D>("../EnemyPos").Position);
-		
-		waypoints = GetTree().GetNodesInGroup("EnemyPatrolPos").Select(saar => saar as Marker3D).ToList();
 
+		head = GetNode<Node3D>("Head");
+		NavigationAgent = GetNode<NavigationAgent3D>("NavigationAgent3D");
+		CurrentState = States.Patrol;
+		patrolTimer = GetNode<Timer>("waitTimer");
 		player = GetTree().GetNodesInGroup("Player")[0] as Player;
-		patrolTimer = GetNode<Timer>("PatrolTimer");
-	}
-	public override void _PhysicsProcess(double delta)
-	{
-		
+		playerCamera = player.GetNode<Camera3D>("Camera3d");
 
-		switch (currentState)
+		waypoints = GetTree().GetNodesInGroup("EnemyWaypoint").Select(saar => saar as Marker3D).ToList();
+		NavigationAgent.SetTargetLocation(waypoints[0].GlobalPosition);
+
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+		switch (CurrentState)
 		{
-			case States.patrol:
-				if (NavigationAgent3D.IsNavigationFinished())
+			case States.Patrol:
+				if (NavigationAgent.IsNavigationFinished())
 				{
 					patrolTimer.Start();
-					currentState = States.waiting;
+					CurrentState = States.Waiting;
 					return;
 				}
-				moveTowaredsPoint(delta, 2);
+
+				moveTowardsPoint(delta, patrolSpeed);
+
 				break;
-			case States.chasing:
-				if (NavigationAgent3D.IsNavigationFinished())
+			case States.Chasing:
+				if (NavigationAgent.IsNavigationFinished())
 				{
 					GD.Print("Attacking!");
-					return;
-				}
-                    NavigationAgent3D.SetTargetLocation(player.Position);
-                moveTowaredsPoint(delta, NavigationAgent3D.MaxSpeed);
-				break;
-			case States.hunting:
-				if (NavigationAgent3D.IsNavigationFinished())
-				{
-					currentState = States.waiting;
+					CurrentState = States.Waiting;
 					patrolTimer.Start();
 					return;
 				}
-                moveTowaredsPoint(delta, 2);
+				NavigationAgent.SetTargetLocation(player.GlobalPosition);
+				moveTowardsPoint(delta, chaseSpeed);
 				break;
-			case States.waiting:
-                if (playerInEarshotFar)
-                {
-                    CheckForPlayer(playerInSightClose, playerInSightFar, playerInEarshotClose, playerInEarshotFar);
-                }
+			case States.Hunting:
+				if (NavigationAgent.IsNavigationFinished())
+				{
+					CurrentState = States.Waiting;
+					patrolTimer.Start();
+					return;
+				}
+				moveTowardsPoint(delta, patrolSpeed);
+				break;
+			case States.Waiting:
+                checkForPlayer();
                 break;
-            default:
+			default:
 				break;
 		}
-		
 	}
-
-	private void moveTowaredsPoint(double delta, float speed)
+	/// <summary>
+	/// Moves the enemy towards the next nav point
+	/// </summary>
+	/// <param name="delta">the games delta speed</param>
+	/// <param name="speed">the speed to move the enemy</param>
+	private void moveTowardsPoint(double delta, float speed)
 	{
-		var targetpos = NavigationAgent3D.GetNextLocation();
-		var direction = GlobalPosition.DirectionTo(targetpos);
-		//GD.Print(direction);
-		var velocity = direction * speed;
-		//NavigationAgent3D.SetVelocity(velocity);
-		faceDirection(targetpos, delta);
-		Velocity = velocity;
+		var targetPos = NavigationAgent.GetNextLocation();
+		var direction = GlobalPosition.DirectionTo(targetPos);
+		Vector3 lookingDirection = lastLookingDirection.Lerp(targetPos, .2f);
+		LookAt(new Vector3(lookingDirection.x, GlobalPosition.y, lookingDirection.z), Vector3.Up);
+		lastLookingDirection = lookingDirection;
+		Velocity = direction * speed;
 		MoveAndSlide();
 		if (playerInEarshotFar)
-		{
-			CheckForPlayer(playerInSightClose, playerInSightFar, playerInEarshotClose, playerInEarshotFar);
-		}
+			checkForPlayer();
 	}
 
-	private void CheckForPlayer(bool closeSight, bool farSight, bool closeSound, bool farSound)
+	/// <summary>
+	/// Raycasts for player and checks if player is in rage and seeable
+	/// sets state to chase or hunt.
+	/// </summary>
+	private void checkForPlayer()
 	{
-		PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
-		var result = spaceState.IntersectRay(new PhysicsRayQueryParameters3D()
+		PhysicsDirectSpaceState3D spaceState3D = GetWorld3d().DirectSpaceState;
+		var result = spaceState3D.IntersectRay(new PhysicsRayQueryParameters3D()
 		{
-			From = GetNode<Node3D>("Head").GlobalPosition,
-			To = player.GetNode<Camera3D>("Camera3d").GlobalPosition,
+			From = head.GlobalPosition,
+			To = playerCamera.GlobalPosition,
 			Exclude = new Godot.Collections.Array { this }
 		});
 
+		bool playerBehindWall = true;
+
 		if (result.Keys.Count > 0)
 		{
-			Node3D s = ((Node3D)result["collider"]) as Node3D;
+			Node3D node = (Node3D)result["collider"];
 
-			if (s is Player)
+			if (node is Player)
 			{
-                
-                Player p = s as Player;
-				//GD.Print(GlobalPosition.DistanceTo(p.GlobalPosition));
-				//GD.Print(p.NoiseLevel / GlobalPosition.DistanceTo(p.GlobalPosition));
-				if (closeSound)
-				{
-					if (p.NoiseLevel / GlobalPosition.DistanceTo(p.GlobalPosition) > 1)
-					{
-						GD.Print("I heard you Close");
-						currentState = States.hunting;
-						NavigationAgent3D.SetTargetLocation(player.Position);
+				Player p = node as Player;
 
-					}
-				}
-                
-				//if (closeSight)
-				//{
-				//	if(p.LightLevel > .2)
-				//	if(p.LightLevel > .2)
-				//	{
-    //                    GD.Print("I saw you CLOSE");
-				//		currentState = States.chasing;
-				//		NavigationAgent3D.SetTargetLocation(player.Position);
-    //                }
-				//}
-				//if (farSight)
-				//{
-    //                if (p.LightLevel > .6)
-    //                {
-    //                    GD.Print("I saw you FAR!");
-				//		currentState = States.chasing;
-    //                }
-    //            }
-				if (farSound)
+				playerBehindWall = false;
+				if (playerInSightClose && (p.LightValue > CloseLightDetect || (p.IsCrouched && p.LightValue > CloseCrouchedLightDetect)))
 				{
-					if (p.NoiseLevel / GlobalPosition.DistanceTo(p.GlobalPosition) > 2)
-					{
-                        GD.Print("I heard you FAR");
-                        NavigationAgent3D.SetTargetLocation(player.Position);
-                        currentState = States.hunting;
-                    }
+
+					CurrentState = States.Chasing;
+					GD.Print("Player In Sight Close");
+				}
+				GD.Print(p.LightValue);
+				if (playerInSightFar && (p.LightValue > FarLightDetect || (p.IsCrouched && p.LightValue > FarCrouchedLightDetect)))
+				{
+					CurrentState = States.Hunting;
+					NavigationAgent.SetTargetLocation(player.GlobalPosition);
+					GD.Print("Player is hunted");
 				}
 			}
 		}
-	}
 
-	private void faceDirection(Vector3 direction, double delta)	
-	{
-		//GD.Print(direction);
-		Vector3 d = lastLookingDirection.Lerp(direction, .2f);
-		LookAt(new Vector3(d.x, GlobalPosition.y, d.z), Vector3.Up);
-		lastLookingDirection = d;
-	}
-
-	private void _on_patrol_timer_timeout()
-	{
-		
-        waypointIndex += 1;
-        if (waypointIndex > waypoints.Count - 1)
+        if (playerInEarshotClose && (playerBehindWall ? 
+			Player.player.NoiseValue / 2 : 
+			Player.player.NoiseValue) / GlobalPosition.DistanceTo(Player.player.GlobalPosition) > CloseSoundDetect)
         {
-            waypointIndex = 0;
+            CurrentState = States.Chasing;
+
+            GD.Print("Player In Earshot Close");
         }
-        NavigationAgent3D.SetTargetLocation(waypoints[waypointIndex].GlobalPosition);
-		currentState = States.patrol;
+
+        if (playerInEarshotFar && (playerBehindWall ?
+            Player.player.NoiseValue / 2 :
+            Player.player.NoiseValue) / GlobalPosition.DistanceTo(Player.player.GlobalPosition) > FarSoundDetect)
+        {
+            if (!Player.player.IsCrouched)
+            {
+                CurrentState = States.Hunting;
+                NavigationAgent.SetTargetLocation(player.GlobalPosition);
+                GD.Print("Player is hunted");
+            }
+
+        }
     }
 
-	private void onVelocityComputed(Vector3 velocity)
+	/// <summary>
+	/// Signal for wait timer for patroling.
+	/// </summary>
+	private void _on_wait_timer_timeout()
 	{
-		Velocity = velocity;
-		MoveAndSlide();
-	}
-
-	private void _on_timer_timeout()
-	{
-		//GetNode<Marker3D>("../EnemyPos").Position;
-		//NavigationAgent3D.SetTargetLocation(GetNode<Marker3D>("../EnemyPos").Position);
-	}
-
-	private void _on_fair_hearing_area_body_entered(Node3D obj)
-	{
-		if (obj is Player)
+		waypointIndex += 1;
+		if (waypointIndex > waypoints.Count - 1)
 		{
-			playerInEarshotFar = true;
-			GD.Print("Player in earshot far");
+			waypointIndex = 0;
 		}
+		NavigationAgent.SetTargetLocation(waypoints[waypointIndex].GlobalPosition);
+		CurrentState = States.Patrol;
 	}
-	private void _on_fair_hearing_area_body_exited(Node3D obj)
-	{
-        if (obj is Player)
-		{
-			playerInEarshotFar = false;
-		}  
-    }
-	private void _on_close_hearing_area_body_entered(Node3D obj)
+
+	/// <summary>
+	/// Signal for when player is in hearing range close to enemey
+	/// </summary>
+	/// <param name="obj">the object that is in range</param>
+	private void _on_close_hearing_body_entered(Node3D obj)
 	{
 		if (obj is Player)
 		{
 			playerInEarshotClose = true;
 		}
-    }
-	private void _on_close_hearing_area_body_exited(Node3D obj)
+	}
+	/// <summary>
+	/// signal for when the player has left hearing range close to enemy
+	/// </summary>
+	/// <param name="obj">the object that has left the range</param>
+	private void _on_close_hearing_body_exited(Node3D obj)
 	{
-		if (obj is Player) { 
+		if (obj is Player)
 			playerInEarshotClose = false;
-		}
-    }
-	private void _on_far_seeing_area_body_entered(Node3D obj)
+
+	}
+	/// <summary>
+	/// signal that fires when the player has entered the far hearing range.
+	/// </summary>
+	/// <param name="obj">the object that has entered the far hearing range.</param>
+	private void _on_far_hearing_body_entered(Node3D obj)
 	{
 		if (obj is Player)
 		{
-			playerInSightFar = true;
+			GD.Print("Player is in Far Hearing");
+			playerInEarshotFar = true;
 		}
-    }
-	private void _on_far_seeing_area_body_exited(Node3D obj)
+	}
+	/// <summary>
+	/// Signal for when the player has left the far hearing range.
+	/// </summary>
+	/// <param name="obj">the obj that has left far hearing range.</param>
+	private void _on_far_hearing_body_exited(Node3D obj)
 	{
 		if (obj is Player)
-		{
-			playerInSightFar = false;
-		}
-    }
-	private void _on_close_seeing_area_body_entered(Node3D obj)
+			playerInEarshotFar = false;
+
+	}
+	/// <summary>
+	/// The signal for when the player has entered close sight range.
+	/// </summary>
+	/// <param name="obj">The obj that has entered close sight range.</param>
+	private void _on_close_sight_body_entered(Node3D obj)
 	{
 		if (obj is Player)
-		{
 			playerInSightClose = true;
-		}
-    }
-	private void _on_close_seeing_area_body_exited(Node3D obj)
+	}
+	/// <summary>
+	/// The signal for when the player has left close sight range.
+	/// </summary>
+	/// <param name="obj">the obj that has left close sight range</param>
+	private void _on_close_sight_body_exited(Node3D obj)
 	{
 		if (obj is Player)
-		{
 			playerInSightClose = false;
-		}
-    }
+
+	}
+	/// <summary>
+	/// The signal for when the player has entered far sight range
+	/// </summary>
+	/// <param name="obj">the obj that has entered far sight range</param>
+	private void _on_far_sight_body_entered(Node3D obj)
+	{
+		if (obj is Player)
+			playerInSightFar = true;
+	}
+	/// <summary>
+	/// The signal for when the player has exited far sight range.
+	/// </summary>
+	/// <param name="obj">the obj that has exited far sight range</param>
+	private void _on_far_sight_body_exited(Node3D obj)
+	{
+		if (obj is Player)
+			playerInSightFar = false;
+	}
+
 }
