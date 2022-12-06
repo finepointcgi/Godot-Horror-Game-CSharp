@@ -1,14 +1,180 @@
-[gd_scene load_steps=7 format=3 uid="uid://bcim6lmamii5j"]
+[gd_scene load_steps=17 format=3 uid="uid://qctv7hitxj4"]
 
+[ext_resource type="Script" path="res://Scenes/LevelOneWakeUp.cs" id="1_pcrm0"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/floor.tscn" id="1_qlooj"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/wall.tscn" id="2_1gvvl"]
-[ext_resource type="PackedScene" path="res://Models/BlockOut/celling.tscn" id="3_rs687"]
+[ext_resource type="PackedScene" uid="uid://4e8a260pdd0k" path="res://Models/BlockOut/celling.tscn" id="3_rs687"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/door.tscn" id="3_tusux"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/window.tscn" id="3_yyno1"]
 [ext_resource type="PackedScene" uid="uid://c3i8poarpae43" path="res://Scenes/player.tscn" id="5_13u15"]
+[ext_resource type="Script" path="res://Scripts/Door.cs" id="7_wc4w0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wej75"]
+size = Vector3(0.0275599, 2.00371, 0.902118)
+
+[sub_resource type="Animation" id="Animation_prafb"]
+resource_name = "Open"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1.5708, -0.25, 0, 0.25, 0, -0.523595, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+
+[sub_resource type="Animation" id="Animation_l4rae"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-0.261796, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_7i3t5"]
+_data = {
+"Open": SubResource("Animation_prafb"),
+"RESET": SubResource("Animation_l4rae")
+}
+
+[sub_resource type="Animation" id="Animation_pbu7i"]
+resource_name = "DoorOpenEvent"
+length = 3.016
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Level BSP/Door:rotation:z")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 3)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Level BSP/Door:rotation:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 3)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Level BSP/Door:rotation:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1.5708, -0.25, 0, 0.25, 0, -0.179769, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 3)
+}
+
+[sub_resource type="Animation" id="Animation_i16aj"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Level BSP/Door:rotation:z")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Level BSP/Door:rotation:x")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Level BSP/Door:rotation:y")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1.5708, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wnb63"]
+_data = {
+"DoorOpenEvent": SubResource("Animation_pbu7i"),
+"RESET": SubResource("Animation_i16aj")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q45v0"]
+size = Vector3(2.60581, 2.1528, 2.4882)
 
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(0.998705, 0, 0, 0, 0.998705, 0, 0, 0, 0.998705, 0, 0, 0)
+script = ExtResource("1_pcrm0")
 
 [node name="Level BSP" type="Node3D" parent="."]
 
@@ -266,10 +432,30 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.003
 [node name="Celling13" parent="Level BSP/Hallway" instance=ExtResource("3_rs687")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.00648, 0, 3.00389)
 
-[node name="Door2" type="CSGBox3D" parent="Level BSP"]
-transform = Transform3D(-1, 0, 1.19364e-07, 0, 1, 0, -1.19364e-07, 0, -1, -1.73189, 1.09711, 1.51163)
-use_collision = true
-size = Vector3(0.12844, 1.99563, 0.891133)
+[node name="Door" type="StaticBody3D" parent="Level BSP"]
+transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, -1.45378, 1.09711, 2.05202)
+collision_layer = 5
+collision_mask = 4
+axis_lock_linear_x = true
+axis_lock_linear_y = true
+axis_lock_linear_z = true
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+script = ExtResource("7_wc4w0")
+HoverText = "Hit E To Open"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level BSP/Door"]
+transform = Transform3D(1, 0, -9.09495e-13, 0, 1, 0, 9.09495e-13, 0, 1, 0.0399392, 0, 0.45024)
+shape = SubResource("BoxShape3D_wej75")
+
+[node name="Door" type="CSGBox3D" parent="Level BSP/Door"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0404794, 0, 0.452902)
+size = Vector3(0.0275474, 1.99563, 0.891133)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Level BSP/Door"]
+libraries = {
+"": SubResource("AnimationLibrary_7i3t5")
+}
 
 [node name="Door3" type="CSGBox3D" parent="Level BSP"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.0142, 1.09711, 3.00172)
@@ -277,27 +463,27 @@ use_collision = true
 size = Vector3(0.12844, 1.99563, 0.891133)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Level BSP"]
-transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, 4.44029, 2.00412, 3.7853)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.44029, 2.00412, 3.7853)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
 [node name="OmniLight3D4" type="OmniLight3D" parent="Level BSP"]
-transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, -0.566193, 2.00412, 3.7853)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.566193, 2.00412, 3.7853)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
 [node name="OmniLight3D5" type="OmniLight3D" parent="Level BSP"]
-transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, -5.57268, 2.00412, 3.7853)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.57268, 2.00412, 3.7853)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
 [node name="OmniLight3D2" type="OmniLight3D" parent="Level BSP"]
-transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, 2.98103, 1.52319, -4.5811)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.98103, 1.52319, -4.5811)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
 [node name="OmniLight3D3" type="OmniLight3D" parent="Level BSP"]
-transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, -2.59155, 1.46361, 1.44027)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.59155, 1.46361, 1.44027)
 light_color = Color(0.584314, 0.529412, 0.439216, 1)
 light_energy = 0.232
 
@@ -309,3 +495,17 @@ shadow_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("5_13u15")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 4.73474, 0.0599114, -6.69089)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_wnb63")
+}
+
+[node name="Area3D" type="Area3D" parent="."]
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2871, 1.22405, 2.88207)
+shape = SubResource("BoxShape3D_q45v0")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Godot Horror Game CSharp"
-run/main_scene="res://Levels/TestLevel.tscn"
+run/main_scene="res://Scenes/Level One WakeUp.tscn"
 config/features=PackedStringArray("4.0", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 

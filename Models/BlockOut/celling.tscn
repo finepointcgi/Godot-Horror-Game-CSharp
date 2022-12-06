@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://4e8a260pdd0k"]
 
 [ext_resource type="PackedScene" uid="uid://ccwu15qt74031" path="res://Models/BlockOut/Celling.glb" id="1_kjwmb"]
 

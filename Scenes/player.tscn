@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://c3i8poarpae43"]
+[gd_scene load_steps=15 format=3 uid="uid://c3i8poarpae43"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_kdrvw"]
 [ext_resource type="PackedScene" uid="uid://cjmg0hfbgrrm3" path="res://Scenes/LightDetect.tscn" id="2_kmut6"]
 [ext_resource type="PackedScene" uid="uid://6r38f2bb202o" path="res://Models/Lantern.blend" id="2_onywc"]
 [ext_resource type="AudioStream" uid="uid://b8odt23skabu" path="res://Sounds/FootstepsOnConcrete.wav" id="4_ui01e"]
+[ext_resource type="Script" path="res://Scripts/InterfaceManager.cs" id="5_35tjj"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_etn12"]
 
@@ -325,6 +326,10 @@ shape = SubResource("CapsuleShape3D_qdxos")
 [node name="Camera3d" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56456, 0)
 
+[node name="RayCast3D" type="RayCast3D" parent="Camera3d"]
+target_position = Vector3(0, 0, -1.503)
+collision_mask = 4
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_qdh08")
@@ -344,3 +349,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 stream = ExtResource("4_ui01e")
 
 [node name="Jump" type="AudioStreamPlayer" parent="."]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1153.0
+offset_bottom = 648.0
+script = ExtResource("5_35tjj")
+
+[node name="InteractInterfaceLabel" type="Label" parent="Control"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -205.0
+offset_top = -29.0
+offset_right = 205.0
+offset_bottom = 98.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,4 +1,5 @@
 using Godot;
+using GodotHorrorGameCSharp.Scripts;
 
 /// <summary>
 /// The main player class
@@ -134,7 +135,7 @@ public partial class Player : CharacterBody3D
 					new PhysicsRayQueryParameters3D() { 
 						From = Position, 
 						To = new Vector3(Position.x, Position.y + 2, Position.z), 
-						Exclude = new Godot.Collections.Array { this } 
+						Exclude =  { this.GetRid() } 
 					});
 
                 if (result.Count <= 0)
@@ -258,7 +259,21 @@ public partial class Player : CharacterBody3D
 			currentState = states.inAir;
 		}
 
-		return direction;
+        PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+        Camera3D camera = GetNode<Camera3D>("Camera3d");
+		RayCast3D rayCast3D = camera.GetNode<RayCast3D>("RayCast3D");
+        InterfaceManager.Manager.ShowInteractionInterface("");
+        if (rayCast3D.IsColliding())
+		{
+            Object obj = rayCast3D.GetCollider();
+            if (obj is Interactable)
+            {
+                Interactable interactable = obj as Interactable;
+                InterfaceManager.Manager.ShowInteractionInterface(interactable.HoverText);
+            }
+        }
+
+        return direction;
     }
 /// <summary>
 /// Handles the flashlight logic. this will show the flashlight if hidden and hide if flashlight is active.
@@ -284,7 +299,7 @@ public partial class Player : CharacterBody3D
 		{
 			From = new Vector3(Position.x, Position.y + .5f, Position.z),
 			To = new Vector3(Position.x, Position.y - 1, Position.z),
-			Exclude = new Godot.Collections.Array { this }
+			Exclude = { this.GetRid() }
 		});
 		surface = surfaceInit;
 		if (surfaceResult.Count > 0)

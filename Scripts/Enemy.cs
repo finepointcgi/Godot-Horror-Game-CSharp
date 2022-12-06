@@ -195,7 +195,7 @@ public partial class Enemy : CharacterBody3D
 		{
 			From = head.GlobalPosition,
 			To = playerCamera.GlobalPosition,
-			Exclude = new Godot.Collections.Array { this }
+			Exclude =  { this.GetRid() }
 		});
 
 		bool playerBehindWall = true;
