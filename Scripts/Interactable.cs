@@ -7,15 +7,10 @@ using System.Threading.Tasks;
 
 namespace GodotHorrorGameCSharp.Scripts
 {
-    public partial class Interactable : Node3D
+    public interface Interactable 
     {
-        public AnimationPlayer player;
-        [Export]
-        public string HoverText;
-
-        public void PlayAnimation(string animation)
-        {
-            player.Play(animation);
-        }
+        string GetInterfaceText();
+        void PlayAnimation(string animation);
+        void Interact();
     }
 }

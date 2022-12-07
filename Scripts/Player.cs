@@ -269,7 +269,11 @@ public partial class Player : CharacterBody3D
             if (obj is Interactable)
             {
                 Interactable interactable = obj as Interactable;
-                InterfaceManager.Manager.ShowInteractionInterface(interactable.HoverText);
+                InterfaceManager.Manager.ShowInteractionInterface(interactable.GetInterfaceText());
+				if (Input.IsActionJustPressed("Interact"))
+				{
+					interactable.Interact();
+				}
             }
         }
 

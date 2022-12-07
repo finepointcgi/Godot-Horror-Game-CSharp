@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://qctv7hitxj4"]
+[gd_scene load_steps=24 format=3 uid="uid://qctv7hitxj4"]
 
 [ext_resource type="Script" path="res://Scenes/LevelOneWakeUp.cs" id="1_pcrm0"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/floor.tscn" id="1_qlooj"]
@@ -8,12 +8,105 @@
 [ext_resource type="PackedScene" path="res://Models/BlockOut/window.tscn" id="3_yyno1"]
 [ext_resource type="PackedScene" uid="uid://c3i8poarpae43" path="res://Scenes/player.tscn" id="5_13u15"]
 [ext_resource type="Script" path="res://Scripts/Door.cs" id="7_wc4w0"]
+[ext_resource type="AudioStream" uid="uid://djqim2woc5th2" path="res://Sounds/DoorShut.wav" id="8_ecmgy"]
+[ext_resource type="AudioStream" uid="uid://b85lgp3cdwkxg" path="res://Sounds/151983__jpkweli__bedroom-door-shutting.wav" id="9_bn2bv"]
+[ext_resource type="AudioStream" uid="uid://bcky6onj43uaf" path="res://Sounds/Door Click Open.wav" id="9_tpli0"]
+[ext_resource type="AudioStream" uid="uid://dng61grsqwx2r" path="res://Sounds/Short Open.wav" id="10_h6i86"]
+[ext_resource type="AudioStream" uid="uid://17fskj5f0pus" path="res://Sounds/Door Creek Slow.wav" id="12_pq64f"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wej75"]
 size = Vector3(0.0275599, 2.00371, 0.902118)
 
-[sub_resource type="Animation" id="Animation_prafb"]
+[sub_resource type="Animation" id="Animation_42npx"]
+resource_name = "Close"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-1.45378, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1.09711, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:position:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(2.05202, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:rotation:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:rotation:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-0.386517, -0.25, 0, 0.25, 0, 1.5708, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:rotation:z")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1)
+}
+tracks/6/type = "audio"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("AudioStreamPlayer3D")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("8_ecmgy")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("9_bn2bv")
+}],
+"times": PackedFloat32Array(0, 0.9)
+}
+
+[sub_resource type="Animation" id="Animation_2nmra"]
 resource_name = "Open"
+length = 1.216
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -23,7 +116,7 @@ tracks/0/loop_wrap = true
 tracks/0/keys = {
 "handle_modes": PackedInt32Array(0, 0),
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 1)
+"times": PackedFloat32Array(0.1, 1.2)
 }
 tracks/1/type = "bezier"
 tracks/1/imported = false
@@ -33,7 +126,7 @@ tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "handle_modes": PackedInt32Array(0, 0),
-"points": PackedFloat32Array(1.5708, -0.25, 0, 0.25, 0, -0.523595, -0.25, 0, 0.25, 0),
+"points": PackedFloat32Array(1.5708, -0.25, 0, 0.25, 0, -0.386517, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0, 1)
 }
 tracks/2/type = "bezier"
@@ -45,7 +138,76 @@ tracks/2/loop_wrap = true
 tracks/2/keys = {
 "handle_modes": PackedInt32Array(0, 0),
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0, 1)
+"times": PackedFloat32Array(0.1, 1.2)
+}
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AudioStreamPlayer3D")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("9_tpli0")
+}, {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("10_h6i86")
+}],
+"times": PackedFloat32Array(0, 0.3)
+}
+
+[sub_resource type="Animation" id="Animation_h8exg"]
+resource_name = "OpenSlow"
+length = 4.073
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0.1, 4)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1.5708, -0.25, 0, 0.25, 0, -0.386517, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 4)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0.1, 4)
+}
+tracks/3/type = "audio"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AudioStreamPlayer3D")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"clips": [{
+"end_offset": 0.92,
+"start_offset": 0.28,
+"stream": ExtResource("12_pq64f")
+}],
+"times": PackedFloat32Array(0)
 }
 
 [sub_resource type="Animation" id="Animation_l4rae"]
@@ -83,10 +245,45 @@ tracks/2/keys = {
 "points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
 "times": PackedFloat32Array(0)
 }
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:position:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-1.45378, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:position:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1.09711, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:position:z")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(2.05202, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7i3t5"]
 _data = {
-"Open": SubResource("Animation_prafb"),
+"Close": SubResource("Animation_42npx"),
+"Open": SubResource("Animation_2nmra"),
+"OpenSlow": SubResource("Animation_h8exg"),
 "RESET": SubResource("Animation_l4rae")
 }
 
@@ -96,7 +293,7 @@ length = 3.016
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Level BSP/Door:rotation:z")
+tracks/0/path = NodePath("Level BSP/ChildrensDoor:rotation:z")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -107,7 +304,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Level BSP/Door:rotation:x")
+tracks/1/path = NodePath("Level BSP/ChildrensDoor:rotation:x")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -118,7 +315,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Level BSP/Door:rotation:y")
+tracks/2/path = NodePath("Level BSP/ChildrensDoor:rotation:y")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -132,7 +329,7 @@ length = 0.001
 tracks/0/type = "bezier"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Level BSP/Door:rotation:z")
+tracks/0/path = NodePath("Level BSP/ChildrensDoor:rotation:z")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -143,7 +340,7 @@ tracks/0/keys = {
 tracks/1/type = "bezier"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Level BSP/Door:rotation:x")
+tracks/1/path = NodePath("Level BSP/ChildrensDoor:rotation:x")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -154,7 +351,7 @@ tracks/1/keys = {
 tracks/2/type = "bezier"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Level BSP/Door:rotation:y")
+tracks/2/path = NodePath("Level BSP/ChildrensDoor:rotation:y")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -170,7 +367,7 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_q45v0"]
-size = Vector3(2.60581, 2.1528, 2.4882)
+size = Vector3(1.00441, 2.1528, 2.4882)
 
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(0.998705, 0, 0, 0, 0.998705, 0, 0, 0, 0.998705, 0, 0, 0)
@@ -432,7 +629,8 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -3.003
 [node name="Celling13" parent="Level BSP/Hallway" instance=ExtResource("3_rs687")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.00648, 0, 3.00389)
 
-[node name="Door" type="StaticBody3D" parent="Level BSP"]
+[node name="ChildrensDoor" type="StaticBody3D" parent="Level BSP"]
+unique_name_in_owner = true
 transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, -1.45378, 1.09711, 2.05202)
 collision_layer = 5
 collision_mask = 4
@@ -442,20 +640,24 @@ axis_lock_linear_z = true
 axis_lock_angular_x = true
 axis_lock_angular_z = true
 script = ExtResource("7_wc4w0")
-HoverText = "Hit E To Open"
+HoverOverText = "Press E to Open"
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Level BSP/Door"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level BSP/ChildrensDoor"]
 transform = Transform3D(1, 0, -9.09495e-13, 0, 1, 0, 9.09495e-13, 0, 1, 0.0399392, 0, 0.45024)
 shape = SubResource("BoxShape3D_wej75")
 
-[node name="Door" type="CSGBox3D" parent="Level BSP/Door"]
+[node name="Door" type="CSGBox3D" parent="Level BSP/ChildrensDoor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0404794, 0, 0.452902)
 size = Vector3(0.0275474, 1.99563, 0.891133)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Level BSP/Door"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Level BSP/ChildrensDoor"]
 libraries = {
 "": SubResource("AnimationLibrary_7i3t5")
 }
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Level BSP/ChildrensDoor"]
+stream = ExtResource("12_pq64f")
+max_distance = 7.69
 
 [node name="Door3" type="CSGBox3D" parent="Level BSP"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.0142, 1.09711, 3.00172)
@@ -505,7 +707,7 @@ libraries = {
 input_ray_pickable = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2871, 1.22405, 2.88207)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.27805, 1.22405, 2.88207)
 shape = SubResource("BoxShape3D_q45v0")
 
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
