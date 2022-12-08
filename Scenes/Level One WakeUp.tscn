@@ -1,8 +1,9 @@
-[gd_scene load_steps=24 format=3 uid="uid://qctv7hitxj4"]
+[gd_scene load_steps=25 format=3 uid="uid://qctv7hitxj4"]
 
 [ext_resource type="Script" path="res://Scenes/LevelOneWakeUp.cs" id="1_pcrm0"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/floor.tscn" id="1_qlooj"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/wall.tscn" id="2_1gvvl"]
+[ext_resource type="AudioStream" uid="uid://dd3j76osgrtye" path="res://Sounds/CreepyGirl Laugh.wav" id="2_p02ie"]
 [ext_resource type="PackedScene" uid="uid://4e8a260pdd0k" path="res://Models/BlockOut/celling.tscn" id="3_rs687"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/door.tscn" id="3_tusux"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/window.tscn" id="3_yyno1"]
@@ -372,6 +373,7 @@ size = Vector3(1.00441, 2.1528, 2.4882)
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(0.998705, 0, 0, 0, 0.998705, 0, 0, 0, 0.998705, 0, 0, 0)
 script = ExtResource("1_pcrm0")
+childRoomLaughFX = ExtResource("2_p02ie")
 
 [node name="Level BSP" type="Node3D" parent="."]
 
@@ -657,6 +659,7 @@ libraries = {
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Level BSP/ChildrensDoor"]
 stream = ExtResource("12_pq64f")
+volume_db = -10.0
 max_distance = 7.69
 
 [node name="Door3" type="CSGBox3D" parent="Level BSP"]
@@ -710,4 +713,14 @@ input_ray_pickable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.27805, 1.22405, 2.88207)
 shape = SubResource("BoxShape3D_q45v0")
 
+[node name="ChildrenRoom" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 4
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ChildrenRoom"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -1.02819, 1.22405, 1.19903)
+shape = SubResource("BoxShape3D_q45v0")
+
 [connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_entered" from="ChildrenRoom" to="." method="_on_children_room_body_entered"]

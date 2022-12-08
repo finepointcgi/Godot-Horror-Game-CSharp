@@ -12,7 +12,7 @@ namespace GodotHorrorGameCSharp.Scripts
         [Export]
         public string HoverOverText;
         private AnimationPlayer player;
-        private bool DoorOpen;
+        public bool DoorOpen;
         public string GetInterfaceText()
         {
             return HoverOverText;

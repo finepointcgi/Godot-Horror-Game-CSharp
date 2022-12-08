@@ -71,6 +71,7 @@ public partial class Player : CharacterBody3D
 	/// The audio player used for the players jump sounds
 	/// </summary>
 	private AudioStreamPlayer jumpAudioPlayer;
+	private AudioStreamPlayer screenAudioPlayer;
 	/// <summary>
 	/// If the player was in air last frame
 	/// </summary>
@@ -88,7 +89,7 @@ public partial class Player : CharacterBody3D
 	/// </summary>
 	private AnimationPlayer playerAnimationPlayer;
 
-    public override void _Ready()
+	public override void _Ready()
 	{
 		player = this;
 		base._Ready();
@@ -100,7 +101,8 @@ public partial class Player : CharacterBody3D
 		footAudioPlayer = GetNode<AudioStreamPlayer>("Footsteps");
 		jumpAudioPlayer = GetNode<AudioStreamPlayer>("Jump");
 		playerAnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-    }
+		screenAudioPlayer = GetNode<AudioStreamPlayer>("EffectSound");
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -117,39 +119,39 @@ public partial class Player : CharacterBody3D
 	/// </summary>
 	private void handleAnimation()
 	{
-        if (currentState == states.sneaking || currentState == states.crouching)
-        {
-            if (!IsCrouched)
-            {
-                playerAnimationPlayer.Play("Crouch");
-                IsCrouched = true;
-            }
+		if (currentState == states.sneaking || currentState == states.crouching)
+		{
+			if (!IsCrouched)
+			{
+				playerAnimationPlayer.Play("Crouch");
+				IsCrouched = true;
+			}
 
-        }
-        else
-        {
-            if (IsCrouched)
-            {
+		}
+		else
+		{
+			if (IsCrouched)
+			{
 				PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
-                var result = spaceState.IntersectRay(
+				var result = spaceState.IntersectRay(
 					new PhysicsRayQueryParameters3D() { 
 						From = Position, 
 						To = new Vector3(Position.x, Position.y + 2, Position.z), 
 						Exclude =  { this.GetRid() } 
 					});
 
-                if (result.Count <= 0)
-                {
-                   playerAnimationPlayer.PlayBackwards("Crouch");
-                    IsCrouched = false;
+				if (result.Count <= 0)
+				{
+				   playerAnimationPlayer.PlayBackwards("Crouch");
+					IsCrouched = false;
 				}
 				else
 				{
 					currentState = states.sneaking;
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 	/// <summary>
 	/// Handles all the sound the player generates from sound effects 
 	/// from walking to the noise values it produces when the player is moving
@@ -168,15 +170,15 @@ public partial class Player : CharacterBody3D
 			}
 		}
 
-        if (currentState == states.sneaking)
-        {
-            NoiseValue = surface.SurfaceResource.NoiseLevel / 3;
-            if (!footAudioPlayer.Playing)
-            {
-                footAudioPlayer.Stream = surface.SurfaceResource.SneakStreamWAV;
-                footAudioPlayer.Play();
-            }
-        }
+		if (currentState == states.sneaking)
+		{
+			NoiseValue = surface.SurfaceResource.NoiseLevel / 3;
+			if (!footAudioPlayer.Playing)
+			{
+				footAudioPlayer.Stream = surface.SurfaceResource.SneakStreamWAV;
+				footAudioPlayer.Play();
+			}
+		}
 
 		if(currentState == states.inAir && wasInAirLastFrame)
 		{
@@ -190,7 +192,7 @@ public partial class Player : CharacterBody3D
 			if (footAudioPlayer.Playing)
 				footAudioPlayer.Stop();
 		}
-    }
+	}
 	/// <summary>
 	/// Handles the movement of the player. It will allow the player to move and sneak.
 	/// </summary>
@@ -216,21 +218,21 @@ public partial class Player : CharacterBody3D
 			velocity.x = Mathf.MoveToward(Velocity.x, 0, speed);
 			velocity.z = Mathf.MoveToward(Velocity.z, 0, speed);
 		}
-        // Add the gravity.
-        if (!IsOnFloor())
-            velocity.y -= gravity * (float)delta;
+		// Add the gravity.
+		if (!IsOnFloor())
+			velocity.y -= gravity * (float)delta;
 		Velocity = velocity;
 		MoveAndSlide();
-    }
+	}
 	/// <summary>
 	/// The main switcher between states. It will take in user inputs and define the state that the player is in.
 	/// </summary>
 	/// <returns>The direction the player is moving in if any</returns>
 	private Vector3 getInput()
 	{
-        Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
-        Vector3 direction = (Transform.basis * new Vector3(inputDir.x, 0, inputDir.y)).Normalized();
-        
+		Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
+		Vector3 direction = (Transform.basis * new Vector3(inputDir.x, 0, inputDir.y)).Normalized();
+		
 		if (Input.IsActionJustPressed("Flashlight"))
 			handleFlashlight();
 
@@ -244,12 +246,12 @@ public partial class Player : CharacterBody3D
 		}
 		else
 		{
-            if (Input.IsActionPressed("Crouch"))
-                currentState = states.crouching;
-            else
-                currentState = states.standing;
-            
-        }
+			if (Input.IsActionPressed("Crouch"))
+				currentState = states.crouching;
+			else
+				currentState = states.standing;
+			
+		}
 
 		if(Input.IsActionJustPressed("Jump") && IsOnFloor())
 		{
@@ -259,26 +261,26 @@ public partial class Player : CharacterBody3D
 			currentState = states.inAir;
 		}
 
-        PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
-        Camera3D camera = GetNode<Camera3D>("Camera3d");
+		PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+		Camera3D camera = GetNode<Camera3D>("Camera3d");
 		RayCast3D rayCast3D = camera.GetNode<RayCast3D>("RayCast3D");
-        InterfaceManager.Manager.ShowInteractionInterface("");
-        if (rayCast3D.IsColliding())
+		InterfaceManager.Manager.ShowInteractionInterface("");
+		if (rayCast3D.IsColliding())
 		{
-            Object obj = rayCast3D.GetCollider();
-            if (obj is Interactable)
-            {
-                Interactable interactable = obj as Interactable;
-                InterfaceManager.Manager.ShowInteractionInterface(interactable.GetInterfaceText());
+			Object obj = rayCast3D.GetCollider();
+			if (obj is Interactable)
+			{
+				Interactable interactable = obj as Interactable;
+				InterfaceManager.Manager.ShowInteractionInterface(interactable.GetInterfaceText());
 				if (Input.IsActionJustPressed("Interact"))
 				{
 					interactable.Interact();
 				}
-            }
-        }
+			}
+		}
 
-        return direction;
-    }
+		return direction;
+	}
 /// <summary>
 /// Handles the flashlight logic. this will show the flashlight if hidden and hide if flashlight is active.
 /// </summary>
@@ -298,7 +300,7 @@ public partial class Player : CharacterBody3D
 	private Surface getSurface()
 	{
 		Surface surface = surfaceInit;
-        PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+		PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
 		var surfaceResult = spaceState.IntersectRay(new PhysicsRayQueryParameters3D()
 		{
 			From = new Vector3(Position.x, Position.y + .5f, Position.z),
@@ -332,5 +334,11 @@ public partial class Player : CharacterBody3D
 
 			camera.Rotation = new Vector3(Mathf.Clamp(camera.Rotation.x - motion.Relative.y / 1000 * Sensitivity, -2, 2), camera.Rotation.y, camera.Rotation.z);
 		}
+	}
+
+	public void PlayEffectSound(AudioStream stream, float volume = 0){
+		screenAudioPlayer.Stream = stream;
+		screenAudioPlayer.VolumeDb = volume;
+		screenAudioPlayer.Play();
 	}
 }
