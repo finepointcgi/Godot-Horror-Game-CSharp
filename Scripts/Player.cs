@@ -70,6 +70,7 @@ public partial class Player : CharacterBody3D
 	/// The audio player used for the players jump sounds
 	/// </summary>
 	private AudioStreamPlayer jumpAudioPlayer;
+	private AudioStreamPlayer eventPlayer;
 	/// <summary>
 	/// If the player was in air last frame
 	/// </summary>
@@ -98,7 +99,8 @@ public partial class Player : CharacterBody3D
 
 		footAudioPlayer = GetNode<AudioStreamPlayer>("Footsteps");
 		jumpAudioPlayer = GetNode<AudioStreamPlayer>("Jump");
-		playerAnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		eventPlayer = GetNode<AudioStreamPlayer>("EventSoundPlayer");
+        playerAnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
     }
 
 	public override void _PhysicsProcess(double delta)
@@ -134,7 +136,7 @@ public partial class Player : CharacterBody3D
 					new PhysicsRayQueryParameters3D() { 
 						From = Position, 
 						To = new Vector3(Position.x, Position.y + 2, Position.z), 
-						Exclude = new Godot.Collections.Array { this } 
+						Exclude = { this.GetRid() } 
 					});
 
                 if (result.Count <= 0)
@@ -284,7 +286,7 @@ public partial class Player : CharacterBody3D
 		{
 			From = new Vector3(Position.x, Position.y + .5f, Position.z),
 			To = new Vector3(Position.x, Position.y - 1, Position.z),
-			Exclude = new Godot.Collections.Array { this }
+			Exclude = { this.GetRid() }
 		});
 		surface = surfaceInit;
 		if (surfaceResult.Count > 0)
@@ -313,5 +315,12 @@ public partial class Player : CharacterBody3D
 
 			camera.Rotation = new Vector3(Mathf.Clamp(camera.Rotation.x - motion.Relative.y / 1000 * Sensitivity, -2, 2), camera.Rotation.y, camera.Rotation.z);
 		}
+	}
+
+	public void PlayNonPositionalSound(AudioStream stream, float volume)
+	{
+		eventPlayer.Stream = stream;
+		eventPlayer.VolumeDb = volume;
+		eventPlayer.Play();
 	}
 }
