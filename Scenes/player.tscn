@@ -307,8 +307,8 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
-collision_layer = 5
-collision_mask = 5
+collision_layer = 6
+collision_mask = 6
 script = ExtResource("1_kdrvw")
 
 [node name="MeshInstance3d" type="MeshInstance3D" parent="."]
@@ -329,7 +329,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56456, 0)
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3d"]
 target_position = Vector3(0, 0, -1.503)
-collision_mask = 4
+collision_mask = 8
+
+[node name="Attachable3" type="StaticBody3D" parent="Camera3d"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0190656, -1.49882)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -372,3 +375,14 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="."]
+node_a = NodePath("../Camera3d/Attachable3")
+linear_limit_x/softness = 1.25
+linear_limit_y/softness = 1.25
+linear_limit_z/softness = 1.25
+angular_motor_x/enabled = true
+angular_motor_y/enabled = true
+angular_motor_z/enabled = true
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Generic6DOFJoint3D"]

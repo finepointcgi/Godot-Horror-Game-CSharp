@@ -1,0 +1,9 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bygxiw25esvcb"]
+
+[ext_resource type="AudioStream" uid="uid://cynm3yuw153yu" path="res://Sounds/JumpLand.wav" id="1_wu32g"]
+[ext_resource type="Script" path="res://Scripts/InteractableResource.cs" id="2_ux7a0"]
+
+[resource]
+script = ExtResource("2_ux7a0")
+HitSoundWAV = ExtResource("1_wu32g")
+NoiseLevel = 0

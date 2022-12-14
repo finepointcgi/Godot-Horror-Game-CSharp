@@ -1,4 +1,5 @@
 using Godot;
+using GodotHorrorGameCSharp.Scripts;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -52,11 +53,11 @@ public partial class Enemy : CharacterBody3D
 	/// <summary>
 	/// If player is in earshot far
 	/// </summary>
-	private bool playerInEarshotFar;
+	private bool ObjectInEarshot;
 	/// <summary>
 	/// If player is in earshot close
 	/// </summary>
-	private bool playerInEarshotClose;
+	private bool objectInEarshotClose;
 	/// <summary>
 	/// If player is in sight far
 	/// </summary>
@@ -107,6 +108,7 @@ public partial class Enemy : CharacterBody3D
     /// </summary>
     [Export]
     private float FarCrouchedLightDetect = .6f;
+	private Dictionary< Node3D, int> soundObjects;
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
@@ -180,7 +182,7 @@ public partial class Enemy : CharacterBody3D
 		lastLookingDirection = lookingDirection;
 		Velocity = direction * speed;
 		MoveAndSlide();
-		if (playerInEarshotFar)
+		if (ObjectInEarshot)
 			checkForPlayer();
 	}
 
@@ -225,7 +227,7 @@ public partial class Enemy : CharacterBody3D
 			}
 		}
 
-        if (playerInEarshotClose && (playerBehindWall ? 
+        if (objectInEarshotClose && (playerBehindWall ? 
 			Player.player.NoiseValue / 2 : 
 			Player.player.NoiseValue) / GlobalPosition.DistanceTo(Player.player.GlobalPosition) > CloseSoundDetect)
         {
@@ -234,7 +236,7 @@ public partial class Enemy : CharacterBody3D
             GD.Print("Player In Earshot Close");
         }
 
-        if (playerInEarshotFar && (playerBehindWall ?
+        if (ObjectInEarshot && (playerBehindWall ?
             Player.player.NoiseValue / 2 :
             Player.player.NoiseValue) / GlobalPosition.DistanceTo(Player.player.GlobalPosition) > FarSoundDetect)
         {
@@ -268,9 +270,13 @@ public partial class Enemy : CharacterBody3D
 	/// <param name="obj">the object that is in range</param>
 	private void _on_close_hearing_body_entered(Node3D obj)
 	{
-		if (obj is Player)
+		if (obj is Player || obj is Interactable)
 		{
-			playerInEarshotClose = true;
+			objectInEarshotClose = true;
+			if (!soundObjects.ContainsKey(obj))
+			{
+				soundObjects.Add(obj, obj.);
+			}
 		}
 	}
 	/// <summary>
@@ -279,8 +285,14 @@ public partial class Enemy : CharacterBody3D
 	/// <param name="obj">the object that has left the range</param>
 	private void _on_close_hearing_body_exited(Node3D obj)
 	{
-		if (obj is Player)
-			playerInEarshotClose = false;
+		if (obj is Player || obj is Interactable)
+		{
+			objectInEarshotClose = false;
+			if(obj is Interactable)
+			{
+				Interactable interactable = (Interactable)obj;
+			}
+		}
 
 	}
 	/// <summary>
@@ -289,10 +301,11 @@ public partial class Enemy : CharacterBody3D
 	/// <param name="obj">the object that has entered the far hearing range.</param>
 	private void _on_far_hearing_body_entered(Node3D obj)
 	{
-		if (obj is Player)
+		if (obj is Player || obj is Interactable)
 		{
 			GD.Print("Player is in Far Hearing");
-			playerInEarshotFar = true;
+			ObjectInEarshot = true;
+
 		}
 	}
 	/// <summary>
@@ -301,8 +314,8 @@ public partial class Enemy : CharacterBody3D
 	/// <param name="obj">the obj that has left far hearing range.</param>
 	private void _on_far_hearing_body_exited(Node3D obj)
 	{
-		if (obj is Player)
-			playerInEarshotFar = false;
+		if (obj is Player || obj is Interactable)
+			ObjectInEarshot = false;
 
 	}
 	/// <summary>

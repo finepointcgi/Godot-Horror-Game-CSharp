@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://nv63dg7kbg2m"]
 
 [ext_resource type="PackedScene" uid="uid://b63auikb752bk" path="res://Models/BlockOut/Door.glb" id="1_j5sdq"]
 
@@ -12,6 +12,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00464702, 0.00152016, 0.00
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)

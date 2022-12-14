@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://d3sd5rw5gm52v"]
 
 [ext_resource type="PackedScene" uid="uid://dihjf3cvfls2u" path="res://Models/BlockOut/Floor.glb" id="1_v6j3w"]
 
@@ -8,6 +8,8 @@ points = PackedVector3Array(1.01587, 0.0599111, 1.01587, -1.01587, -0.067073, -1
 [node name="Floor" instance=ExtResource("1_v6j3w")]
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
 shape = SubResource("ConvexPolygonShape3D_dkwnv")

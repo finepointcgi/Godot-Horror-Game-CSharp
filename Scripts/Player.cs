@@ -88,7 +88,8 @@ public partial class Player : CharacterBody3D
 	/// The players animation player used to play animations
 	/// </summary>
 	private AnimationPlayer playerAnimationPlayer;
-
+	public Node3D Attachable;
+	public RigidBody3D GrabbedObject;
 	public override void _Ready()
 	{
 		player = this;
@@ -102,7 +103,8 @@ public partial class Player : CharacterBody3D
 		jumpAudioPlayer = GetNode<AudioStreamPlayer>("Jump");
 		playerAnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		screenAudioPlayer = GetNode<AudioStreamPlayer>("EffectSound");
-	}
+		//Attachable = GetNode<Node3D>("Attachable");
+    }
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -135,8 +137,8 @@ public partial class Player : CharacterBody3D
 				PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
 				var result = spaceState.IntersectRay(
 					new PhysicsRayQueryParameters3D() { 
-						From = Position, 
-						To = new Vector3(Position.x, Position.y + 2, Position.z), 
+						From = Position + new Vector3(0,.1f,0), 
+						To = new Vector3(Position.x, Position.y + .1f, Position.z), 
 						Exclude =  { this.GetRid() } 
 					});
 
@@ -147,6 +149,7 @@ public partial class Player : CharacterBody3D
 				}
 				else
 				{
+					GD.Print("not uncrouching");
 					currentState = states.sneaking;
 				}
 			}
@@ -261,6 +264,16 @@ public partial class Player : CharacterBody3D
 			currentState = states.inAir;
 		}
 
+		if (Input.IsActionJustPressed("Throw"))
+		{
+			if (GrabbedObject != null)
+			{
+				RigidBody3D temp = GrabbedObject;
+				GrabObject(GrabbedObject);
+				temp.ApplyImpulse((GetNode<Camera3D>("Camera3d").GlobalPosition - temp.GlobalPosition ).Normalized() * -1 * 5);
+			}
+		}
+
 		PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
 		Camera3D camera = GetNode<Camera3D>("Camera3d");
 		RayCast3D rayCast3D = camera.GetNode<RayCast3D>("RayCast3D");
@@ -281,9 +294,9 @@ public partial class Player : CharacterBody3D
 
 		return direction;
 	}
-/// <summary>
-/// Handles the flashlight logic. this will show the flashlight if hidden and hide if flashlight is active.
-/// </summary>
+	/// <summary>
+	/// Handles the flashlight logic. this will show the flashlight if hidden and hide if flashlight is active.
+	/// </summary>
 	private void handleFlashlight()
 	{
 		if (FlashlightOut)
@@ -341,4 +354,20 @@ public partial class Player : CharacterBody3D
 		screenAudioPlayer.VolumeDb = volume;
 		screenAudioPlayer.Play();
 	}
+
+	public void GrabObject(RigidBody3D body)
+	{
+		GD.Print("boo");
+		if (GrabbedObject == null)
+		{
+			GetNode<Generic6DOFJoint3D>("Generic6DOFJoint3D").NodeB = body.GetPath();
+			GrabbedObject = body;
+			
+        }
+		else
+		{
+            GetNode<Generic6DOFJoint3D>("Generic6DOFJoint3D").NodeB = GetNode<Generic6DOFJoint3D>("Generic6DOFJoint3D").GetNode<StaticBody3D>("StaticBody3D").GetPath();
+            GrabbedObject = null;
+		}
+    }
 }
