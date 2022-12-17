@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://cdkaq35af3jx0"]
+[gd_scene load_steps=9 format=3 uid="uid://cdkaq35af3jx0"]
 
 [ext_resource type="PackedScene" uid="uid://c3i8poarpae43" path="res://Scenes/player.tscn" id="1_m4lvg"]
 [ext_resource type="PackedScene" uid="uid://dh0vsid6gfbvy" path="res://Scenes/Enemy.tscn" id="2_6syrt"]
 [ext_resource type="Script" path="res://Scripts/Surface.cs" id="3_o2b5v"]
 [ext_resource type="Resource" uid="uid://b4pswmuw0xa5s" path="res://Sounds/Concrete.tres" id="4_fci2h"]
 [ext_resource type="Resource" uid="uid://yfaqrw7aoh4g" path="res://Sounds/Wood.tres" id="5_2ym8j"]
+[ext_resource type="PackedScene" uid="uid://dg5hhtaowot4" path="res://Scenes/grabbable_object.tscn" id="6_crcov"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_0kjur"]
 vertices = PackedVector3Array(-7.01793, 0.423532, -1.60234, -4.51793, 0.423532, -1.60234, -4.26793, 0.423532, -2.85234, 4.23207, 0.423532, -2.85234, 4.48207, 0.423532, -1.60234, 6.98207, 0.423532, -1.60234, 6.98207, 0.423532, -7.10234, 4.23207, 0.423532, -2.85234, 6.98207, 0.423532, -7.10234, -0.0179281, 0.423532, -7.10234, -4.26793, 0.423532, -2.85234, -7.01793, 0.423532, -7.10234, -7.01793, 0.423532, -1.60234, -4.26793, 0.423532, -2.85234, -0.0179281, 0.423532, -7.10234, 6.98207, 0.423532, -1.60234, 4.48207, 0.423532, -1.60234, 4.23207, 0.423532, -0.602342, -4.26793, 0.423532, -0.602342, -4.51793, 0.423532, -1.60234, -7.01793, 0.423532, -1.60234, -7.01793, 0.423532, 7.14766, -4.26793, 0.423532, -0.602342, -7.01793, 0.423532, 7.14766, -0.0179281, 0.423532, 7.14766, 4.23207, 0.423532, -0.602342, 6.98207, 0.423532, 7.14766, 6.98207, 0.423532, -1.60234, 4.23207, 0.423532, -0.602342, -0.0179281, 0.423532, 7.14766)
@@ -15,7 +16,7 @@ polygons = [PackedInt32Array(2, 1, 0), PackedInt32Array(4, 3, 5), PackedInt32Arr
 [node name="TestLevel" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("1_m4lvg")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.266209, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189473, 0)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0104218, 0.0260086, 0.00114202)
@@ -60,3 +61,6 @@ use_collision = true
 mesh = SubResource("BoxMesh_a2p5m")
 script = ExtResource("3_o2b5v")
 SurfaceResource = ExtResource("4_fci2h")
+
+[node name="Grabbable Object" parent="." instance=ExtResource("6_crcov")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.11896, 0.209944, -2.38419e-07)

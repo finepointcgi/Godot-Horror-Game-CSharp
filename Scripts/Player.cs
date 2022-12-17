@@ -1,4 +1,5 @@
 using Godot;
+using GodotHorrorGameCSharp.Scripts;
 
 /// <summary>
 /// The main player class
@@ -87,8 +88,11 @@ public partial class Player : CharacterBody3D
 	/// The players animation player used to play animations
 	/// </summary>
 	private AnimationPlayer playerAnimationPlayer;
-
-    public override void _Ready()
+	private RayCast3D headRaycast;
+	private RigidBody3D grabbedObject;
+	private Generic6DOFJoint3D grabbedJoint;
+	private Camera3D camera;
+	public override void _Ready()
 	{
 		player = this;
 		base._Ready();
@@ -100,8 +104,11 @@ public partial class Player : CharacterBody3D
 		footAudioPlayer = GetNode<AudioStreamPlayer>("Footsteps");
 		jumpAudioPlayer = GetNode<AudioStreamPlayer>("Jump");
 		eventPlayer = GetNode<AudioStreamPlayer>("EventSoundPlayer");
-        playerAnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-    }
+		playerAnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
+		camera = GetNode<Camera3D>("Camera3d");
+        headRaycast = camera.GetNode<RayCast3D>("RayCast3D");
+		grabbedJoint = camera.GetNode<Generic6DOFJoint3D>("Generic6DOFJoint3D");
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -118,39 +125,40 @@ public partial class Player : CharacterBody3D
 	/// </summary>
 	private void handleAnimation()
 	{
-        if (currentState == states.sneaking || currentState == states.crouching)
-        {
-            if (!IsCrouched)
-            {
-                playerAnimationPlayer.Play("Crouch");
-                IsCrouched = true;
-            }
+		if (currentState == states.sneaking || currentState == states.crouching)
+		{
+			if (!IsCrouched)
+			{
+				playerAnimationPlayer.Play("Crouch");
+				IsCrouched = true;
+			}
 
-        }
-        else
-        {
-            if (IsCrouched)
-            {
+		}
+		else
+		{
+			if (IsCrouched)
+			{
 				PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
-                var result = spaceState.IntersectRay(
-					new PhysicsRayQueryParameters3D() { 
-						From = Position, 
-						To = new Vector3(Position.x, Position.y + 2, Position.z), 
-						Exclude = { this.GetRid() } 
+				var result = spaceState.IntersectRay(
+					new PhysicsRayQueryParameters3D()
+					{
+						From = Position,
+						To = new Vector3(Position.x, Position.y + 2, Position.z),
+						Exclude = { this.GetRid() }
 					});
 
-                if (result.Count <= 0)
-                {
-                   playerAnimationPlayer.PlayBackwards("Crouch");
-                    IsCrouched = false;
+				if (result.Count <= 0)
+				{
+					playerAnimationPlayer.PlayBackwards("Crouch");
+					IsCrouched = false;
 				}
 				else
 				{
 					currentState = states.sneaking;
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 	/// <summary>
 	/// Handles all the sound the player generates from sound effects 
 	/// from walking to the noise values it produces when the player is moving
@@ -169,29 +177,29 @@ public partial class Player : CharacterBody3D
 			}
 		}
 
-        if (currentState == states.sneaking)
-        {
-            NoiseValue = surface.SurfaceResource.NoiseLevel / 3;
-            if (!footAudioPlayer.Playing)
-            {
-                footAudioPlayer.Stream = surface.SurfaceResource.SneakStreamWAV;
-                footAudioPlayer.Play();
-            }
-        }
+		if (currentState == states.sneaking)
+		{
+			NoiseValue = surface.SurfaceResource.NoiseLevel / 3;
+			if (!footAudioPlayer.Playing)
+			{
+				footAudioPlayer.Stream = surface.SurfaceResource.SneakStreamWAV;
+				footAudioPlayer.Play();
+			}
+		}
 
-		if(currentState == states.inAir && wasInAirLastFrame)
+		if (currentState == states.inAir && wasInAirLastFrame)
 		{
 			NoiseValue = surface.SurfaceResource.JumpLandNoiseLevel;
 			jumpAudioPlayer.Stream = surface.SurfaceResource.JumpLandStreamWAV;
 			jumpAudioPlayer.Play();
 		}
 
-		if(currentState == states.standing || currentState == states.crouching)
+		if (currentState == states.standing || currentState == states.crouching)
 		{
 			if (footAudioPlayer.Playing)
 				footAudioPlayer.Stop();
 		}
-    }
+	}
 	/// <summary>
 	/// Handles the movement of the player. It will allow the player to move and sneak.
 	/// </summary>
@@ -217,54 +225,77 @@ public partial class Player : CharacterBody3D
 			velocity.x = Mathf.MoveToward(Velocity.x, 0, speed);
 			velocity.z = Mathf.MoveToward(Velocity.z, 0, speed);
 		}
-        // Add the gravity.
-        if (!IsOnFloor())
-            velocity.y -= gravity * (float)delta;
+		// Add the gravity.
+		if (!IsOnFloor())
+			velocity.y -= gravity * (float)delta;
 		Velocity = velocity;
 		MoveAndSlide();
-    }
+	}
 	/// <summary>
 	/// The main switcher between states. It will take in user inputs and define the state that the player is in.
 	/// </summary>
 	/// <returns>The direction the player is moving in if any</returns>
 	private Vector3 getInput()
 	{
-        Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
-        Vector3 direction = (Transform.basis * new Vector3(inputDir.x, 0, inputDir.y)).Normalized();
-        
+		Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
+		Vector3 direction = (Transform.basis * new Vector3(inputDir.x, 0, inputDir.y)).Normalized();
+
 		if (Input.IsActionJustPressed("Flashlight"))
 			handleFlashlight();
 
-		if(direction != Vector3.Zero)
+		if (direction != Vector3.Zero)
 		{
 			if (Input.IsActionPressed("Crouch"))
 				currentState = states.sneaking;
 			else
 				currentState = states.walking;
-			
+
 		}
 		else
 		{
-            if (Input.IsActionPressed("Crouch"))
-                currentState = states.crouching;
-            else
-                currentState = states.standing;
-            
-        }
+			if (Input.IsActionPressed("Crouch"))
+				currentState = states.crouching;
+			else
+				currentState = states.standing;
 
-		if(Input.IsActionJustPressed("Jump") && IsOnFloor())
+		}
+
+		if (Input.IsActionJustPressed("Jump") && IsOnFloor())
 		{
 			currentState = states.jumping;
-		}else if (!IsOnFloor())
+		}
+		else if (!IsOnFloor())
 		{
 			currentState = states.inAir;
 		}
 
+		if (headRaycast.IsColliding())
+		{
+			Object obj = headRaycast.GetCollider();
+			if (obj is Interactable)
+			{
+				Interactable interactable = obj as Interactable;
+				if (Input.IsActionJustPressed("Interact"))
+				{
+					interactable.Interact();
+				}
+			}
+		}
+		if(grabbedObject != null)
+		{
+			if (Input.IsActionJustPressed("Throw"))
+			{
+				RigidBody3D temp = grabbedObject;
+				GrabObject(grabbedObject);
+				temp.ApplyImpulse((camera.GlobalPosition - temp.GlobalPosition).Normalized() * -1 * 5);
+			}
+		}
+
 		return direction;
-    }
-/// <summary>
-/// Handles the flashlight logic. this will show the flashlight if hidden and hide if flashlight is active.
-/// </summary>
+	}
+	/// <summary>
+	/// Handles the flashlight logic. this will show the flashlight if hidden and hide if flashlight is active.
+	/// </summary>
 	private void handleFlashlight()
 	{
 		if (FlashlightOut)
@@ -281,7 +312,7 @@ public partial class Player : CharacterBody3D
 	private Surface getSurface()
 	{
 		Surface surface = surfaceInit;
-        PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+		PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
 		var surfaceResult = spaceState.IntersectRay(new PhysicsRayQueryParameters3D()
 		{
 			From = new Vector3(Position.x, Position.y + .5f, Position.z),
@@ -323,4 +354,19 @@ public partial class Player : CharacterBody3D
 		eventPlayer.VolumeDb = volume;
 		eventPlayer.Play();
 	}
+	
+	public void GrabObject(RigidBody3D body)
+	{
+		if(grabbedObject == null)
+		{
+			grabbedObject = body;
+			grabbedJoint.NodeB = body.GetPath();
+		}
+		else
+		{
+			grabbedObject = null;
+			grabbedJoint.NodeB = grabbedJoint.GetNode<StaticBody3D>("ResetBody").GetPath();
+		}
+	}
 }
+

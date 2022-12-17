@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bcim6lmamii5j"]
+[gd_scene load_steps=13 format=3 uid="uid://bcim6lmamii5j"]
 
 [ext_resource type="Script" path="res://Levels/LevelOneWakeUp.cs" id="1_glj6v"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/floor.tscn" id="1_hcnn8"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://caarocqllrphu" path="res://Scenes/Door.tscn" id="6_khf6v"]
 [ext_resource type="PackedScene" uid="uid://c3i8poarpae43" path="res://Scenes/player.tscn" id="6_ue3i6"]
 [ext_resource type="AudioStream" uid="uid://b6chjryie5jde" path="res://Sounds/366888__marissrar__creepy-ambience.wav" id="10_m2ed6"]
+[ext_resource type="PackedScene" uid="uid://dg5hhtaowot4" path="res://Scenes/grabbable_object.tscn" id="11_pupoq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8ogg0"]
 size = Vector3(1.36162, 1.82882, 1.77465)
@@ -343,6 +344,9 @@ shape = SubResource("BoxShape3D_8ogg0")
 stream = ExtResource("10_m2ed6")
 volume_db = -22.0
 autoplay = true
+
+[node name="Grabbable Object" parent="." instance=ExtResource("11_pupoq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.40732, 1.17287, -4.94749)
 
 [connection signal="body_entered" from="E_ChildroomDoorOpen" to="." method="_on_e_childroom_door_open_body_entered"]
 [connection signal="body_entered" from="E_ChildroomSound" to="." method="_on_e_childroom_sound_body_entered"]
