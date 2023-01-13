@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dknnxgt2vyc8c"]
+
+[ext_resource type="Texture2D" uid="uid://cf56c2s4lu3dh" path="res://icon.svg" id="1_6lmi1"]
+[ext_resource type="Script" path="res://Scenes/Item.cs" id="1_nwpk8"]
+
+[resource]
+script = ExtResource("1_nwpk8")
+ID = "1"
+Name = "item"
+ResourcePath = ""
+Icon = ExtResource("1_6lmi1")
+StackSize = 5
+IsStackable = true
+IsSplittable = true

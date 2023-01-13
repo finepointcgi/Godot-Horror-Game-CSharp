@@ -275,7 +275,7 @@ public partial class Enemy : CharacterBody3D
 			objectInEarshotClose = true;
 			if (!soundObjects.ContainsKey(obj))
 			{
-				soundObjects.Add(obj, obj.);
+				//soundObjects.Add(obj, obj.);
 			}
 		}
 	}

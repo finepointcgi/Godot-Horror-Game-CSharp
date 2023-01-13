@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_kdrvw"]
 [ext_resource type="PackedScene" uid="uid://cjmg0hfbgrrm3" path="res://Scenes/LightDetect.tscn" id="2_kmut6"]
+[ext_resource type="PackedScene" uid="uid://6r38f2bb202o" path="res://Models/Lantern.blend" id="2_onywc"]
 [ext_resource type="AudioStream" uid="uid://b8odt23skabu" path="res://Sounds/FootstepsOnConcrete.wav" id="4_ui01e"]
-[ext_resource type="Script" path="res://Scripts/InterfaceManager.cs" id="5_35tjj"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_etn12"]
 
@@ -307,8 +307,8 @@ _data = {
 }
 
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
-collision_layer = 6
-collision_mask = 6
+collision_layer = 17
+collision_mask = 17
 script = ExtResource("1_kdrvw")
 
 [node name="MeshInstance3d" type="MeshInstance3D" parent="."]
@@ -328,11 +328,24 @@ shape = SubResource("CapsuleShape3D_qdxos")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56456, 0)
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3d"]
-target_position = Vector3(0, 0, -1.503)
+target_position = Vector3(0, 0, -1.5)
 collision_mask = 8
 
-[node name="Attachable3" type="StaticBody3D" parent="Camera3d"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0190656, -1.49882)
+[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Camera3d"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.56456, 0)
+node_a = NodePath("StaticBody3D")
+linear_limit_x/softness = 1.35
+linear_limit_y/softness = 1.35
+linear_limit_z/softness = 1.35
+angular_motor_x/enabled = true
+angular_motor_y/enabled = true
+angular_motor_z/enabled = true
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Camera3d/Generic6DOFJoint3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58333, -1.19762)
+
+[node name="ResetBody" type="StaticBody3D" parent="Camera3d/Generic6DOFJoint3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.58333, -1.19762)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -343,46 +356,15 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.419442, 1.33967, -1.10128)
 light_energy = 0.0
 
+[node name="Lantern" parent="OmniLight3d" instance=ExtResource("2_onywc")]
+transform = Transform3D(0.159746, 0, 0, 0, 0.159746, 0, 0, 0, 0.159746, 0, -0.572936, 0)
+
 [node name="LightDetect" parent="." instance=ExtResource("2_kmut6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Footsteps" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_ui01e")
 
-[node name="EffectSound" type="AudioStreamPlayer" parent="."]
-
 [node name="Jump" type="AudioStreamPlayer" parent="."]
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 1153.0
-offset_bottom = 648.0
-script = ExtResource("5_35tjj")
-
-[node name="InteractInterfaceLabel" type="Label" parent="Control"]
-unique_name_in_owner = true
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -205.0
-offset_top = -29.0
-offset_right = 205.0
-offset_bottom = 98.0
-grow_horizontal = 2
-grow_vertical = 2
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="."]
-node_a = NodePath("../Camera3d/Attachable3")
-linear_limit_x/softness = 1.25
-linear_limit_y/softness = 1.25
-linear_limit_z/softness = 1.25
-angular_motor_x/enabled = true
-angular_motor_y/enabled = true
-angular_motor_z/enabled = true
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Generic6DOFJoint3D"]
+[node name="EventSoundPlayer" type="AudioStreamPlayer" parent="."]

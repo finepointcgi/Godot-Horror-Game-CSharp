@@ -19,7 +19,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.266209, 0)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0104218, 0.0260086, 0.00114202)
-navmesh = SubResource("NavigationMesh_0kjur")
+navigation_mesh = SubResource("NavigationMesh_0kjur")
 
 [node name="CsgBox3d" type="CSGBox3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0104218, -0.0260086, -0.00114202)

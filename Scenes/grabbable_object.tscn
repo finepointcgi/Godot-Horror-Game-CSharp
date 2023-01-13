@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://dfr01bee5ufkt"]
+
+[ext_resource type="Script" path="res://Scenes/Pickupable.cs" id="1_yimls"]
+[ext_resource type="Resource" path="res://Sounds/GrabbableObject.tres" id="2_acb7c"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_utrrl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bammb"]
+size = Vector3(0.241, 0.241, 0.241)
+
+[node name="Grabbable Object" type="RigidBody3D"]
+collision_layer = 9
+collision_mask = 9
+max_contacts_reported = 3
+contact_monitor = true
+script = ExtResource("1_yimls")
+ItemResource = ExtResource("2_acb7c")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.241377, 0, 0, 0, 0.241377, 0, 0, 0, 0.241377, 0, 0, 0)
+mesh = SubResource("BoxMesh_utrrl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_bammb")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]

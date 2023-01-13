@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpoggd5p80huj"]
+
+[ext_resource type="Script" path="res://Scenes/Inventory.cs" id="1_fdg5e"]
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fdg5e")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+columns = 10
+
+[node name="Button" type="Button" parent="."]
+offset_left = 974.0
+offset_top = 593.0
+offset_right = 1142.0
+offset_bottom = 638.0
+text = "Add Item"
+
+[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
