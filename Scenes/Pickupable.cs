@@ -7,9 +7,7 @@ public partial class Pickupable : RigidBody3D, Interactable
     [Export]
     public string HoverOverText;
 	[Export]
-	public string HoverOverText;
-	[Export]
-	public InteractableResouce ItemResource;
+	public InteractableResource ItemResource;
 	private AudioStreamPlayer3D audioStreamPlayer3D;
 	private double noiseValue;
 	private float currentCount = .2f;

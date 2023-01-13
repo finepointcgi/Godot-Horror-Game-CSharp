@@ -3,23 +3,27 @@
 [ext_resource type="Script" path="res://Scenes/InventoryButton.cs" id="1_b04lx"]
 
 [node name="InventoryButton" type="Button"]
+custom_minimum_size = Vector2(44, 44)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -1.0
 offset_right = -1108.0
-offset_bottom = -606.0
+offset_bottom = -605.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_b04lx")
 
 [node name="TextureRect" type="TextureRect" parent="."]
-layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
 offset_right = 40.0
 offset_bottom = 40.0
+ignore_texture_size = true
+stretch_mode = 4
 
 [node name="Label" type="Label" parent="."]
-layout_mode = 0
-offset_left = 19.0
+offset_left = 29.0
 offset_top = 19.0
 offset_right = 43.0
 offset_bottom = 45.0

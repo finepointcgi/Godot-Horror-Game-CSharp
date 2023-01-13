@@ -9,6 +9,7 @@ ID = "1"
 Name = "item"
 ResourcePath = ""
 Icon = ExtResource("1_6lmi1")
+Quantity = 3
 StackSize = 5
 IsStackable = true
 IsSplittable = true

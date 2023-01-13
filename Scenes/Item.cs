@@ -12,7 +12,7 @@ public partial class Item : Resource
     [Export]
     public Texture2D Icon { get; set; }
     [Export]
-    public int  Quantity { get; set; }
+    public int Quantity { get; set; }
     [Export]
     public int StackSize { get; set; }
     [Export]

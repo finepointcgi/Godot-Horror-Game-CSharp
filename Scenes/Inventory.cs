@@ -11,7 +11,7 @@ public partial class Inventory : Control
 		{ "null",null }
 	};
 
-	public static int? currentIndex = 0;
+	public static int? currentIndex = null;
 	public static readonly string ItemButtonPath = "res://InventoryButton.tscn";
 	private GridContainer gridContainer;
 	private List<Item> items = new List<Item>();
@@ -40,6 +40,14 @@ public partial class Inventory : Control
         }
 	}
 
+    public void reflowButtons()
+    {
+        for (int i = 0; i < Capacity; i++)
+        {
+            UpdateButton(i);
+        }
+    }
+
     private void OnButtonClicked(object sender, ItemButtonEventArgs e)
     {
         if(currentIndex == e.Index)
@@ -50,9 +58,10 @@ public partial class Inventory : Control
 
 		if(currentIndex == null)
 		{
-			if (items[e.Index]!=null)
+			if (items[e.Index] != null)
 			{
-				GD.Print("select Item");
+				currentIndex = e.Index;
+				GD.Print("select Item for use or spawning");
 			}
 			return;
 		}
@@ -69,7 +78,9 @@ public partial class Inventory : Control
 				items[currentIndex.Value] = items[e.Index].Stack(items[e.Index]);
 			}
 		}
-
+		UpdateButton(currentIndex.Value);
+		UpdateButton(e.Index);
+		currentIndex = null;
     }
 
 
@@ -84,40 +95,132 @@ public partial class Inventory : Control
 		Add(ResourceLoader.Load<Item>("res://new_resource.tres"));
 	}
 
+	public void _on_button_2_button_down()
+	{
+		Remove(ResourceLoader.Load<Item>("res://new_resource.tres"));
+	}
 
     public void Add(Item item)
 	{
-		if(items.Contains(item))
-		{
-			List<Item> currentItemStacks = items.Where(x => x.ID == item.ID).ToList();
-			foreach (var stack in currentItemStacks)
-			{
-				if (stack.Quantity >= stack.StackSize) continue;
+        Item currentItem = item.Copy();
+		int index = 0;
 
-				if(stack.Quantity + item.Quantity > stack.StackSize)
+		for (int i = 0; i < items.Count; i++)
+		{
+
+			if (items[i].ID == currentItem.ID && items[i].Quantity != items[i].StackSize)
+			{
+				if (items[i].Quantity + currentItem.Quantity > items[i].StackSize)
 				{
-					item.Quantity = item.Quantity - (stack.StackSize - stack.Quantity);
+					items[i].Quantity = currentItem.StackSize;
+
+                    currentItem.Quantity = -(currentItem.Quantity - items[i].StackSize);
+					UpdateButton(i);
 				}
+				else
+				{
+					items[i].Quantity += currentItem.Quantity;
+					currentItem.Quantity = 0;
+					UpdateButton(i);
+                }
 			}
 		}
-        if (item.Quantity > 0)
-        {
-            items.Add(item);
+		
+		if (currentItem.Quantity > 0)
+		{
+			if(currentItem.Quantity < currentItem.StackSize){
+                items.Add(currentItem);
+                UpdateButton(items.Count - 1);
+			}
+			else
+			{
+				Item tempItem = currentItem;
+				tempItem.Quantity = currentItem.StackSize;
+                items.Add(currentItem);
+                UpdateButton(items.Count - 1);
+				currentItem.Quantity -= currentItem.StackSize;
+                Add(currentItem);
+			}
+
+			
         }
-		
-		
 	}
 
-	public void Remove(Item item)
+	public bool Remove(Item item)
 	{
-		if (items.Contains(item))
+		if (canAfford(item))
 		{
-			//items.Where
+			Item currentItem = item.Copy();
+
+			for (int i = 0; i < items.Count; i++)
+			{
+				if (items[i].ID == currentItem.ID)
+				{
+					if (items[i].Quantity - currentItem.Quantity < 0)
+					{
+
+
+						currentItem.Quantity -= items[i].Quantity;
+						items[i].Quantity = 0;
+						UpdateButton(i);
+					}
+					else
+					{
+						items[i].Quantity -= currentItem.Quantity;
+						currentItem.Quantity = 0;
+						UpdateButton(i);
+					}
+				}
+
+				if (currentItem.Quantity <= 0)
+				{
+					break;
+				}
+			}
+			items.RemoveAll(x => x.Quantity <= 0);
+			if (currentItem.Quantity > 0)
+			{
+				Remove(currentItem);
+			}
+			reflowButtons();
+			return true;
 		}
-	}
+		else { return false; }
+		
+    }
 	
+	private bool canAfford(Item item)
+	{
+		List<Item> currentItems = items.Where(x => x.ID == item.ID).ToList();
+
+		int i = 0;
+		foreach(Item item1 in currentItems)
+		{
+			i += currentItems.Count;
+		}
+
+		if(item.Quantity < i)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	public void Clear()
 	{
 		items.Clear();
 	}
+
+    public void UpdateButton(int index)
+    {
+		if(items.ElementAtOrDefault(index) != null)
+		{
+			gridContainer.GetChild<InventoryButton>(index).UpdateItem(items[index], index);
+		}
+		else
+		{
+            gridContainer.GetChild<InventoryButton>(index).UpdateItem(null, index);
+
+        }
+    }
 }

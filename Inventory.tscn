@@ -12,6 +12,7 @@ grow_vertical = 2
 script = ExtResource("1_fdg5e")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -19,13 +20,27 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/h_separation = 15
 columns = 10
 
+[node name="Button2" type="Button" parent="."]
+layout_mode = 1
+offset_left = 791.0
+offset_top = 593.0
+offset_right = 959.0
+offset_bottom = 638.0
+text = "Remove Item"
+
 [node name="Button" type="Button" parent="."]
+layout_mode = 0
 offset_left = 974.0
 offset_top = 593.0
 offset_right = 1142.0
 offset_bottom = 638.0
 text = "Add Item"
 
+[connection signal="button_down" from="Button2" to="." method="_on_button_2_button_down"]
 [connection signal="button_down" from="Button" to="." method="_on_button_button_down"]

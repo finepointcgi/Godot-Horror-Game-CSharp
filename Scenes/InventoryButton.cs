@@ -10,7 +10,7 @@ public partial class InventoryButton : Button
     public string EmptyIcon = "res://UI/None.png";
     private TextureRect icon;
     private Label quantityLabel;
-    private int index;
+    private int index { get; set; }
 
     public event EventHandler<ItemButtonEventArgs> ItemButtonClicked;
     public override void _Ready()
@@ -25,13 +25,14 @@ public partial class InventoryButton : Button
         ItemButtonClicked.Invoke(null, new ItemButtonEventArgs(index, CurrentItem));
     }
 
-    public void UpdateItem(Item item)
+    public void UpdateItem(Item item, int index)
     {
+        this.index = index;
         CurrentItem = item;
-
-        if(CurrentItem!= null)
+        GD.Print(item);
+        if(CurrentItem == null)
         {
-            icon.Texture = ResourceLoader.Load<Texture2D>(EmptyIcon);
+            icon.Texture = null;
             quantityLabel.Text= string.Empty;
         }
         else
