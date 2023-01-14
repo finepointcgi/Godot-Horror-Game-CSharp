@@ -1,5 +1,4 @@
 using Godot;
-using System;
 /// <summary>
 /// A resource used to describe our surfaces
 /// </summary>

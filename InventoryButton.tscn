@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjsqe30v00nhj"]
+[gd_scene load_steps=3 format=3 uid="uid://bjsqe30v00nhj"]
 
 [ext_resource type="Script" path="res://Scenes/InventoryButton.cs" id="1_b04lx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ftant"]
+size = Vector2(45, 47)
 
 [node name="InventoryButton" type="Button"]
 custom_minimum_size = Vector2(44, 44)
@@ -28,5 +31,11 @@ offset_top = 19.0
 offset_right = 43.0
 offset_bottom = 45.0
 text = "1"
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(22.5, 22.5)
+shape = SubResource("RectangleShape2D_ftant")
 
 [connection signal="button_down" from="." to="." method="OnPressed"]

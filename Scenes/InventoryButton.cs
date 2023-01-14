@@ -1,7 +1,5 @@
 ﻿using Godot;
-using System.Collections.Generic;
 using System;
-using System.Linq;
 
 public partial class InventoryButton : Button
 {
@@ -11,6 +9,7 @@ public partial class InventoryButton : Button
     private TextureRect icon;
     private Label quantityLabel;
     private int index { get; set; }
+
 
     public event EventHandler<ItemButtonEventArgs> ItemButtonClicked;
     public override void _Ready()
@@ -29,16 +28,16 @@ public partial class InventoryButton : Button
     {
         this.index = index;
         CurrentItem = item;
-        GD.Print(item);
-        if(CurrentItem == null)
+
+        if (CurrentItem == null)
         {
             icon.Texture = null;
-            quantityLabel.Text= string.Empty;
+            quantityLabel.Text = string.Empty;
         }
         else
         {
             icon.Texture = item.Icon;
-            quantityLabel.Text= item.Quantity.ToString();
+            quantityLabel.Text = item.Quantity.ToString();
         }
     }
 }

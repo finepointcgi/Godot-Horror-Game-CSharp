@@ -1,5 +1,4 @@
 ﻿using Godot;
-using System;
 
 public partial class Item : Resource
 {
@@ -26,7 +25,7 @@ public partial class Item : Resource
         Name = item.Name;
         ResourcePath = item.ResourcePath;
         Icon = item.Icon;
-        Quantity= item.Quantity;
+        Quantity = item.Quantity;
         StackSize = item.StackSize;
 
         return temp;
@@ -84,6 +83,10 @@ public partial class Item : Resource
         return item;
     }
 
-
     public Item Copy() => MemberwiseClone() as Item;
+
+    public void Use()
+    {
+        GD.Print("use Item");
+    }
 }

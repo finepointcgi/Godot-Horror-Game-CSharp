@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bpoggd5p80huj"]
+[gd_scene load_steps=5 format=3 uid="uid://bpoggd5p80huj"]
 
 [ext_resource type="Script" path="res://Scenes/Inventory.cs" id="1_fdg5e"]
+[ext_resource type="PackedScene" uid="uid://bjsqe30v00nhj" path="res://InventoryButton.tscn" id="2_gucra"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jkuad"]
+radius = 5.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2w0ta"]
+size = Vector2(60, 55)
 
 [node name="Inventory" type="Control"]
 layout_mode = 3
@@ -24,10 +31,11 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
 columns = 10
 
 [node name="Button2" type="Button" parent="."]
-layout_mode = 1
+layout_mode = 0
 offset_left = 791.0
 offset_top = 593.0
 offset_right = 959.0
@@ -42,5 +50,39 @@ offset_right = 1142.0
 offset_bottom = 638.0
 text = "Add Item"
 
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_jkuad")
+
+[node name="InventoryButton" parent="Area2D" instance=ExtResource("2_gucra")]
+visible = false
+offset_top = 0.0
+offset_right = 44.0
+offset_bottom = 44.0
+
+[node name="Button3" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1045.0
+offset_top = 24.0
+offset_right = 1105.0
+offset_bottom = 78.0
+text = "Trash"
+
+[node name="Trash" type="Area2D" parent="Button3"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Button3/Trash"]
+position = Vector2(30, 26.5)
+shape = SubResource("RectangleShape2D_2w0ta")
+
+[node name="TextureRect" type="TextureRect" parent="Button3"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [connection signal="button_down" from="Button2" to="." method="_on_button_2_button_down"]
 [connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]
+[connection signal="area_exited" from="Area2D" to="." method="_on_area_2d_area_exited"]
+[connection signal="area_entered" from="Button3/Trash" to="." method="_on_trash_area_entered"]
+[connection signal="area_exited" from="Button3/Trash" to="." method="_on_trash_area_exited"]
