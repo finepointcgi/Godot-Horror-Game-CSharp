@@ -62,7 +62,7 @@ public partial class Player : CharacterBody3D
 	/// <summary>
 	/// The gravity of the player
 	/// </summary>
-	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
+	public float gravity;
 	/// <summary>
 	/// The audio player used for the players footsteps
 	/// </summary>
@@ -83,7 +83,7 @@ public partial class Player : CharacterBody3D
 	/// <summary>
 	/// The current state the player is in
 	/// </summary>
-	private states currentState = states.standing;
+	private states currentState;
 	/// <summary>
 	/// The players animation player used to play animations
 	/// </summary>
@@ -92,8 +92,12 @@ public partial class Player : CharacterBody3D
 	private RigidBody3D grabbedObject;
 	private Generic6DOFJoint3D grabbedJoint;
 	private Camera3D camera;
+	private Inventory inventory;
 	public override void _Ready()
 	{
+		gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
+        currentState = states.standing;
+
 		player = this;
 		base._Ready();
 		Input.MouseMode = Input.MouseModeEnum.Captured;
@@ -108,6 +112,7 @@ public partial class Player : CharacterBody3D
 		camera = GetNode<Camera3D>("Camera3d");
         headRaycast = camera.GetNode<RayCast3D>("RayCast3D");
 		grabbedJoint = camera.GetNode<Generic6DOFJoint3D>("Generic6DOFJoint3D");
+		inventory = GetNode<Inventory>("Inventory");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -268,16 +273,18 @@ public partial class Player : CharacterBody3D
 		{
 			currentState = states.inAir;
 		}
-
-		if (headRaycast.IsColliding())
+		if (headRaycast != null)
 		{
-			Object obj = headRaycast.GetCollider();
-			if (obj is Interactable)
+			if (headRaycast.IsColliding())
 			{
-				Interactable interactable = obj as Interactable;
-				if (Input.IsActionJustPressed("Interact"))
+				Object obj = headRaycast.GetCollider();
+				if (obj is Interactable)
 				{
-					interactable.Interact();
+					Interactable interactable = obj as Interactable;
+					if (Input.IsActionJustPressed("Interact"))
+					{
+						interactable.Interact();
+					}
 				}
 			}
 		}
@@ -288,6 +295,18 @@ public partial class Player : CharacterBody3D
 				RigidBody3D temp = grabbedObject;
 				GrabObject(grabbedObject);
 				temp.ApplyImpulse((camera.GlobalPosition - temp.GlobalPosition).Normalized() * -1 * 5);
+			}
+		}
+		if (Input.IsActionJustPressed("Inventory"))
+		{
+			inventory.Visible = !inventory.Visible;
+			if(inventory.Visible)
+			{
+				Input.MouseMode = Input.MouseModeEnum.Visible;
+			}
+			else
+			{
+				Input.MouseMode = Input.MouseModeEnum.Captured;
 			}
 		}
 
@@ -338,7 +357,7 @@ public partial class Player : CharacterBody3D
 	public override void _Input(InputEvent @event)
 	{
 		base._Input(@event);
-		if (@event is InputEventMouseMotion)
+		if (@event is InputEventMouseMotion && !inventory.Visible)
 		{
 			InputEventMouseMotion motion = @event as InputEventMouseMotion;
 			Rotation = new Vector3(Rotation.x, Rotation.y - motion.Relative.x / 1000 * Sensitivity, Rotation.z);

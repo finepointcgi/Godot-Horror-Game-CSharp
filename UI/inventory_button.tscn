@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://dir5fey61juja"]
+
+[ext_resource type="Script" path="res://InventoryButton.cs" id="1_dtws2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_urc0r"]
+size = Vector2(38, 38)
+
+[node name="InventoryButton" type="Button"]
+custom_minimum_size = Vector2(40, 40)
+script = ExtResource("1_dtws2")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 37.0
+offset_bottom = 38.0
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_top = 19.0
+offset_right = 40.0
+offset_bottom = 45.0
+horizontal_alignment = 2
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(20, 20)
+shape = SubResource("RectangleShape2D_urc0r")

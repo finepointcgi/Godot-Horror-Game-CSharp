@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://btjb3o7qy6cdk"]
+
+[ext_resource type="Script" path="res://HealthPotion.cs" id="1_1awqb"]
+[ext_resource type="Texture2D" uid="uid://cf56c2s4lu3dh" path="res://icon.svg" id="1_47ec1"]
+
+[resource]
+script = ExtResource("1_1awqb")
+HealAmount = 100
+ID = 3
+Name = "Health Potion"
+ResourcePath = null
+Icon = ExtResource("1_47ec1")
+Quantity = 4
+StackSize = 10
+IsStackable = true

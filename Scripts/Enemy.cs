@@ -123,7 +123,7 @@ public partial class Enemy : CharacterBody3D
 		playerCamera = player.GetNode<Camera3D>("Camera3d");
 
 		waypoints = GetTree().GetNodesInGroup("EnemyWaypoint").Select(saar => saar as Marker3D).ToList();
-		NavigationAgent.SetTargetLocation(waypoints[0].GlobalPosition);
+		NavigationAgent.TargetLocation = waypoints[0].GlobalPosition;
 
 	}
 
@@ -153,7 +153,7 @@ public partial class Enemy : CharacterBody3D
 					patrolTimer.Start();
 					return;
 				}
-				NavigationAgent.SetTargetLocation(player.GlobalPosition);
+				NavigationAgent.TargetLocation = player.GlobalPosition;
 				moveTowardsPoint(delta, chaseSpeed);
 				break;
 			case States.Hunting:
@@ -290,7 +290,7 @@ public partial class Enemy : CharacterBody3D
 				if (playerInSightFar && (p.LightValue > FarLightDetect || (p.IsCrouched && p.LightValue > FarCrouchedLightDetect)))
 				{
 					CurrentState = States.Hunting;
-					NavigationAgent.SetTargetLocation(player.GlobalPosition);
+					NavigationAgent.TargetLocation = player.GlobalPosition;
 					GD.Print("Player is hunted");
 				}
 			}
@@ -309,7 +309,7 @@ public partial class Enemy : CharacterBody3D
 		{
 			waypointIndex = 0;
 		}
-		NavigationAgent.SetTargetLocation(waypoints[waypointIndex].GlobalPosition);
+		NavigationAgent.TargetLocation = waypoints[waypointIndex].GlobalPosition;
 		CurrentState = States.Patrol;
 	}
 

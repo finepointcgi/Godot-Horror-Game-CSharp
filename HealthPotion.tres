@@ -1,0 +1,18 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://gsbss37hblqj"]
+
+[ext_resource type="Script" path="res://HealthPotion.cs" id="1_q1y3m"]
+
+[sub_resource type="Gradient" id="Gradient_0oi4f"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g1rjn"]
+gradient = SubResource("Gradient_0oi4f")
+
+[resource]
+script = ExtResource("1_q1y3m")
+ID = 2
+Name = "Health Potion"
+ResourcePath = null
+Icon = SubResource("GradientTexture1D_g1rjn")
+Quantity = 4
+StackSize = 10
+IsStackable = true
