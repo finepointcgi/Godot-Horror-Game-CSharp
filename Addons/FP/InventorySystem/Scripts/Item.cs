@@ -17,6 +17,10 @@ public partial class Item : Resource
     public int StackSize { get; set; }
     [Export]
     public bool IsStackable { get; set; }
+    [Export]
+    public Item SubItem { get; set; }
+    [Export]
+    public Item BaseItem {get; set;}
 
     public Item Copy() => MemberwiseClone() as Item;
 

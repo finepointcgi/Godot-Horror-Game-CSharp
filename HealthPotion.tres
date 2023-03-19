@@ -9,6 +9,7 @@ gradient = SubResource("Gradient_0oi4f")
 
 [resource]
 script = ExtResource("1_q1y3m")
+HealAmount = 10
 ID = 2
 Name = "Health Potion"
 ResourcePath = null

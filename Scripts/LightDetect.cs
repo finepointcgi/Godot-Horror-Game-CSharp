@@ -26,12 +26,12 @@ public partial class LightDetect : Node3D
 			for (int x = 0; x < image.GetWidth(); x++)
 			{
 				Color pixel = image.GetPixel(x, y);
-				float lightness = (pixel.r + pixel.g + pixel.b) / 3;
+				float lightness = (pixel.R + pixel.G + pixel.B) / 3;
 				lightnessList.Add(lightness);
 			}
 		}
 		LightLevel = lightnessList.Average();
 
-		GetNode<Camera3D>("SubViewportContainer/SubViewport/Camera3D").GlobalPosition = new Vector3(this.GlobalPosition.x, this.GlobalPosition.y + .5f, GlobalPosition.z);
+		GetNode<Camera3D>("SubViewportContainer/SubViewport/Camera3D").GlobalPosition = new Vector3(this.GlobalPosition.X, this.GlobalPosition.Y + .5f, GlobalPosition.Z);
 	}
 }

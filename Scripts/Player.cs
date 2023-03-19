@@ -90,7 +90,7 @@ public partial class Player : CharacterBody3D
 	private AnimationPlayer playerAnimationPlayer;
 	private RayCast3D headRaycast;
 	private RigidBody3D grabbedObject;
-	private Generic6DOFJoint3D grabbedJoint;
+	private Generic6DofJoint3D grabbedJoint;
 	private Camera3D camera;
 	private Inventory inventory;
 	public override void _Ready()
@@ -111,7 +111,7 @@ public partial class Player : CharacterBody3D
 		playerAnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		camera = GetNode<Camera3D>("Camera3d");
         headRaycast = camera.GetNode<RayCast3D>("RayCast3D");
-		grabbedJoint = camera.GetNode<Generic6DOFJoint3D>("Generic6DOFJoint3D");
+		grabbedJoint = camera.GetNode<Generic6DofJoint3D>("Generic6DOFJoint3D");
 		inventory = GetNode<Inventory>("Inventory");
 	}
 
@@ -143,12 +143,12 @@ public partial class Player : CharacterBody3D
 		{
 			if (IsCrouched)
 			{
-				PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+				PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
 				var result = spaceState.IntersectRay(
 					new PhysicsRayQueryParameters3D()
 					{
 						From = Position,
-						To = new Vector3(Position.x, Position.y + 2, Position.z),
+						To = new Vector3(Position.X, Position.Y + 2, Position.Z),
 						Exclude = { this.GetRid() }
 					});
 
@@ -218,21 +218,21 @@ public partial class Player : CharacterBody3D
 			speed = CrouchedSpeed;
 
 		if (currentState == states.jumping)
-			velocity.y = JumpVelocity;
+			velocity.Y = JumpVelocity;
 
 		if (direction != Vector3.Zero)
 		{
-			velocity.x = direction.x * speed;
-			velocity.z = direction.z * speed;
+			velocity.X = direction.X * speed;
+			velocity.Z = direction.Z * speed;
 		}
 		else
 		{
-			velocity.x = Mathf.MoveToward(Velocity.x, 0, speed);
-			velocity.z = Mathf.MoveToward(Velocity.z, 0, speed);
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, speed);
+			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, speed);
 		}
 		// Add the gravity.
 		if (!IsOnFloor())
-			velocity.y -= gravity * (float)delta;
+			velocity.Y -= gravity * (float)delta;
 		Velocity = velocity;
 		MoveAndSlide();
 	}
@@ -243,7 +243,7 @@ public partial class Player : CharacterBody3D
 	private Vector3 getInput()
 	{
 		Vector2 inputDir = Input.GetVector("MoveLeft", "MoveRight", "MoveForward", "MoveBackward");
-		Vector3 direction = (Transform.basis * new Vector3(inputDir.x, 0, inputDir.y)).Normalized();
+		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 
 		if (Input.IsActionJustPressed("Flashlight"))
 			handleFlashlight();
@@ -277,7 +277,7 @@ public partial class Player : CharacterBody3D
 		{
 			if (headRaycast.IsColliding())
 			{
-				Object obj = headRaycast.GetCollider();
+				GodotObject obj = headRaycast.GetCollider();
 				if (obj is Interactable)
 				{
 					Interactable interactable = obj as Interactable;
@@ -331,11 +331,11 @@ public partial class Player : CharacterBody3D
 	private Surface getSurface()
 	{
 		Surface surface = surfaceInit;
-		PhysicsDirectSpaceState3D spaceState = GetWorld3d().DirectSpaceState;
+		PhysicsDirectSpaceState3D spaceState = GetWorld3D().DirectSpaceState;
 		var surfaceResult = spaceState.IntersectRay(new PhysicsRayQueryParameters3D()
 		{
-			From = new Vector3(Position.x, Position.y + .5f, Position.z),
-			To = new Vector3(Position.x, Position.y - 1, Position.z),
+			From = new Vector3(Position.X, Position.Y + .5f, Position.Z),
+			To = new Vector3(Position.X, Position.Y - 1, Position.Z),
 			Exclude = { this.GetRid() }
 		});
 		surface = surfaceInit;
@@ -346,8 +346,7 @@ public partial class Player : CharacterBody3D
 
 				if (surfaceResult["collider"].AsGodotObject() is Surface)
 				{
-					surface = (Surface)surfaceResult["collider"];
-
+					surface = surfaceResult["collider"].Obj as Surface;
 				}
 			}
 		}
@@ -360,10 +359,10 @@ public partial class Player : CharacterBody3D
 		if (@event is InputEventMouseMotion && !inventory.Visible)
 		{
 			InputEventMouseMotion motion = @event as InputEventMouseMotion;
-			Rotation = new Vector3(Rotation.x, Rotation.y - motion.Relative.x / 1000 * Sensitivity, Rotation.z);
+			Rotation = new Vector3(Rotation.X, Rotation.Y - motion.Relative.X / 1000 * Sensitivity, Rotation.Z);
 			Camera3D camera = GetNode<Camera3D>("Camera3d");
 
-			camera.Rotation = new Vector3(Mathf.Clamp(camera.Rotation.x - motion.Relative.y / 1000 * Sensitivity, -2, 2), camera.Rotation.y, camera.Rotation.z);
+			camera.Rotation = new Vector3(Mathf.Clamp(camera.Rotation.X - motion.Relative.Y / 1000 * Sensitivity, -2, 2), camera.Rotation.Y, camera.Rotation.Z);
 		}
 	}
 

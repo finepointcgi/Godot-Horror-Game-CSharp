@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://c3i8poarpae43"]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_kdrvw"]
 [ext_resource type="PackedScene" uid="uid://cjmg0hfbgrrm3" path="res://Scenes/LightDetect.tscn" id="2_kmut6"]
-[ext_resource type="PackedScene" uid="uid://cwd6lubellow2" path="res://UI/Inventory.tscn" id="2_ncw6p"]
+[ext_resource type="PackedScene" path="res://Addons/FP/InventorySystem/Scenes/Inventory.tscn" id="2_ncw6p"]
 [ext_resource type="PackedScene" uid="uid://6r38f2bb202o" path="res://Models/Lantern.blend" id="2_onywc"]
 [ext_resource type="AudioStream" uid="uid://b8odt23skabu" path="res://Sounds/FootstepsOnConcrete.wav" id="4_ui01e"]
 

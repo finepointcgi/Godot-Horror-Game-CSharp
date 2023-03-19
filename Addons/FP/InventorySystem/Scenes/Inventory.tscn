@@ -1,0 +1,139 @@
+[gd_scene load_steps=6 format=3 uid="uid://cwd6lubellow2"]
+
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/Inventory.cs" id="1_jktpt"]
+[ext_resource type="PackedScene" uid="uid://c2w8g6dj2ke04" path="res://Addons/FP/InventorySystem/Scenes/investigation_base_scene.tscn" id="2_l8kob"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_160op"]
+radius = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ayck"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vn4my"]
+size = Vector2(34, 31)
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_jktpt")
+itemButtonPath = "res://Addons/FP/InventorySystem/Scenes/inventory_button.tscn"
+
+[node name="MouseArea2d" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseArea2d"]
+shape = SubResource("CircleShape2D_160op")
+
+[node name="InvestigationBaseScene" parent="." instance=ExtResource("2_l8kob")]
+visible = false
+
+[node name="InventoryMenu" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="InventoryMenu"]
+layout_mode = 0
+offset_left = 484.0
+offset_top = 171.0
+offset_right = 707.0
+offset_bottom = 534.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5ayck")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="InventoryMenu/Panel"]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.5
+offset_top = -162.5
+offset_right = 68.5
+offset_bottom = 161.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="InventoryMenu/Panel/ScrollContainer"]
+layout_mode = 2
+columns = 4
+
+[node name="Trash" type="Button" parent="InventoryMenu/Panel"]
+layout_mode = 0
+offset_left = 182.0
+offset_top = 2.0
+offset_right = 220.0
+offset_bottom = 37.0
+
+[node name="TrashArea2D" type="Area2D" parent="InventoryMenu/Panel/Trash"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InventoryMenu/Panel/Trash/TrashArea2D"]
+position = Vector2(19, 16.5)
+shape = SubResource("RectangleShape2D_vn4my")
+
+[node name="AddButton2" type="Button" parent="InventoryMenu"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 817.0
+offset_top = 577.0
+offset_right = 905.0
+offset_bottom = 608.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Add Item2"
+
+[node name="RemoveButton2" type="Button" parent="InventoryMenu"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 698.0
+offset_top = 577.0
+offset_right = 818.0
+offset_bottom = 608.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Remove Item2"
+
+[node name="AddButton" type="Button" parent="InventoryMenu"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1033.0
+offset_top = 577.0
+offset_right = 1112.0
+offset_bottom = 608.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Add Item"
+
+[node name="RemoveButton" type="Button" parent="InventoryMenu"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 914.0
+offset_top = 577.0
+offset_right = 1025.0
+offset_bottom = 608.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Remove Item"
+
+[connection signal="area_entered" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_entered"]
+[connection signal="area_exited" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_exited"]
+[connection signal="area_entered" from="InventoryMenu/Panel/Trash/TrashArea2D" to="." method="_on_trash_area_2d_area_entered"]
+[connection signal="area_exited" from="InventoryMenu/Panel/Trash/TrashArea2D" to="." method="_on_trash_area_2d_area_exited"]
+[connection signal="button_down" from="InventoryMenu/AddButton2" to="." method="_on_add_button_2_button_down"]
+[connection signal="button_down" from="InventoryMenu/RemoveButton2" to="." method="_on_remove_button_2_button_down"]
+[connection signal="button_down" from="InventoryMenu/AddButton" to="." method="_on_add_button_button_down"]
+[connection signal="button_down" from="InventoryMenu/RemoveButton" to="." method="_on_remove_button_button_down"]

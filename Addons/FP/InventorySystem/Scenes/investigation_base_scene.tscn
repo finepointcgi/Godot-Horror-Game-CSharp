@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://c2w8g6dj2ke04"]
+
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/InvestigationBaseScene.cs" id="1_qpd2v"]
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/InvestagationCamera.cs" id="2_w2p3t"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_iclx7"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_rkgv5"]
+sky_material = SubResource("ProceduralSkyMaterial_iclx7")
+
+[sub_resource type="Environment" id="Environment_mtovg"]
+background_mode = 2
+sky = SubResource("Sky_rkgv5")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_xkwsp"]
+
+[node name="InvestigationBaseScene" type="Node3D"]
+script = ExtResource("1_qpd2v")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_mtovg")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.978647, 0.0469369, 0.200118, -0.154727, 0.809131, 0.566892, -0.135313, -0.585751, 0.799116, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965145, 0.261718, 0, -0.261718, 0.965145, 0, 1.41515, 4)
+script = ExtResource("2_w2p3t")
+
+[node name="RotationAroundBase" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RotationAroundBase"]
+mesh = SubResource("BoxMesh_xkwsp")

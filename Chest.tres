@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Texture2D" uid="uid://cf56c2s4lu3dh" path="res://icon.svg" id="1_x1iiu"]
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/Item.cs" id="3_kan5q"]
+
+[resource]
+script = ExtResource("3_kan5q")
+ID = 6
+Name = "Chest"
+ResourcePath = "res://Chest.tscn"
+Icon = ExtResource("1_x1iiu")
+Quantity = 1
+StackSize = 5
+IsStackable = true

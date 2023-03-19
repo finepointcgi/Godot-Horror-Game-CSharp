@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" path="res://Models/BlockOut/door.tscn" id="4_wjwus"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/window.tscn" id="5_dl26b"]
 [ext_resource type="PackedScene" uid="uid://caarocqllrphu" path="res://Scenes/Door.tscn" id="6_khf6v"]
-[ext_resource type="PackedScene" uid="uid://c3i8poarpae43" path="res://Scenes/player.tscn" id="6_ue3i6"]
+[ext_resource type="PackedScene" path="res://Scenes/player.tscn" id="6_ue3i6"]
 [ext_resource type="AudioStream" uid="uid://b6chjryie5jde" path="res://Sounds/366888__marissrar__creepy-ambience.wav" id="10_m2ed6"]
 [ext_resource type="PackedScene" uid="uid://dg5hhtaowot4" path="res://Scenes/grabbable_object.tscn" id="11_pupoq"]
 

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://c6gnjnch00nbe"]
+
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/InvestigationObject.cs" id="1_5gnuh"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_lgjch"]
+
+[node name="InspectionObject" type="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+script = ExtResource("1_5gnuh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_lgjch")
+
+[node name="SubItem" type="Node3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]

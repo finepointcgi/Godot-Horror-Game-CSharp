@@ -1,7 +1,7 @@
-[gd_resource type="Resource" load_steps=3 format=3 uid="uid://bqfmt2gvg4ivp"]
+[gd_resource type="Resource" load_steps=3 format=3]
 
 [ext_resource type="Texture2D" uid="uid://cf56c2s4lu3dh" path="res://icon.svg" id="1_phygi"]
-[ext_resource type="Script" path="res://Item.cs" id="2_orqet"]
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/Item.cs" id="2_orqet"]
 
 [resource]
 script = ExtResource("2_orqet")

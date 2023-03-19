@@ -123,7 +123,7 @@ public partial class Enemy : CharacterBody3D
 		playerCamera = player.GetNode<Camera3D>("Camera3d");
 
 		waypoints = GetTree().GetNodesInGroup("EnemyWaypoint").Select(saar => saar as Marker3D).ToList();
-		NavigationAgent.TargetLocation = waypoints[0].GlobalPosition;
+		NavigationAgent.TargetPosition = waypoints[0].GlobalPosition;
 
 	}
 
@@ -153,7 +153,7 @@ public partial class Enemy : CharacterBody3D
 					patrolTimer.Start();
 					return;
 				}
-				NavigationAgent.TargetLocation = player.GlobalPosition;
+				NavigationAgent.TargetPosition = player.GlobalPosition;
 				moveTowardsPoint(delta, chaseSpeed);
 				break;
 			case States.Hunting:
@@ -179,10 +179,10 @@ public partial class Enemy : CharacterBody3D
 	/// <param name="speed">the speed to move the enemy</param>
 	private void moveTowardsPoint(double delta, float speed)
 	{
-		var targetPos = NavigationAgent.GetNextLocation();
+		var targetPos = NavigationAgent.GetNextPathPosition();
 		var direction = GlobalPosition.DirectionTo(targetPos);
 		Vector3 lookingDirection = lastLookingDirection.Lerp(targetPos, .2f);
-		LookAt(new Vector3(lookingDirection.x, GlobalPosition.y, lookingDirection.z), Vector3.Up);
+		LookAt(new Vector3(lookingDirection.X, GlobalPosition.Y, lookingDirection.Z), Vector3.Up);
 		lastLookingDirection = lookingDirection;
 		Velocity = direction * speed;
 		MoveAndSlide();
@@ -200,7 +200,7 @@ public partial class Enemy : CharacterBody3D
 				if(isSoundLoudEnough(player.NoiseValue, checkIfObjectIsBehindWall(player), player.GlobalPosition))
 				{
 					CurrentState = States.Hunting;
-					NavigationAgent.TargetLocation = player.GlobalPosition;
+					NavigationAgent.TargetPosition = player.GlobalPosition;
 
 				}
 			}
@@ -210,7 +210,7 @@ public partial class Enemy : CharacterBody3D
                 if (isSoundLoudEnough(interactable.GetSound(), checkIfObjectIsBehindWall(item), item.GlobalPosition))
                 {
                     CurrentState = States.Hunting;
-                    NavigationAgent.TargetLocation = item.GlobalPosition;
+                    NavigationAgent.TargetPosition = item.GlobalPosition;
 
                 }
             }
@@ -233,7 +233,7 @@ public partial class Enemy : CharacterBody3D
 
 	private bool checkIfObjectIsBehindWall(Node3D obj)
 	{
-        PhysicsDirectSpaceState3D spaceState3D = GetWorld3d().DirectSpaceState;
+        PhysicsDirectSpaceState3D spaceState3D = GetWorld3D().DirectSpaceState;
         var result = spaceState3D.IntersectRay(new PhysicsRayQueryParameters3D()
         {
             From = head.GlobalPosition,
@@ -261,7 +261,7 @@ public partial class Enemy : CharacterBody3D
 	/// </summary>
 	private void checkForPlayer()
 	{
-		PhysicsDirectSpaceState3D spaceState3D = GetWorld3d().DirectSpaceState;
+		PhysicsDirectSpaceState3D spaceState3D = GetWorld3D().DirectSpaceState;
 		var result = spaceState3D.IntersectRay(new PhysicsRayQueryParameters3D()
 		{
 			From = head.GlobalPosition,
@@ -290,7 +290,7 @@ public partial class Enemy : CharacterBody3D
 				if (playerInSightFar && (p.LightValue > FarLightDetect || (p.IsCrouched && p.LightValue > FarCrouchedLightDetect)))
 				{
 					CurrentState = States.Hunting;
-					NavigationAgent.TargetLocation = player.GlobalPosition;
+					NavigationAgent.TargetPosition = player.GlobalPosition;
 					GD.Print("Player is hunted");
 				}
 			}
@@ -309,7 +309,7 @@ public partial class Enemy : CharacterBody3D
 		{
 			waypointIndex = 0;
 		}
-		NavigationAgent.TargetLocation = waypoints[waypointIndex].GlobalPosition;
+		NavigationAgent.TargetPosition = waypoints[waypointIndex].GlobalPosition;
 		CurrentState = States.Patrol;
 	}
 
