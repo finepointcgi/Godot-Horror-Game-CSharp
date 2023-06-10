@@ -11,13 +11,25 @@ config_version=5
 [application]
 
 config/name="Godot Horror Game CSharp"
-run/main_scene="res://Addons/FP/InventorySystem/Scenes/Inventory.tscn"
+run/main_scene="res://UI/MainMenu.tscn"
 config/features=PackedStringArray("4.0", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GameManager="*res://GameManager.cs"
 
 [dotnet]
 
 project/assembly_name="Godot Horror Game CSharp"
+
+[editor]
+
+naming/scene_name_casing=1
+
+[editor_plugins]
+
+enabled=PackedStringArray()
 
 [input]
 

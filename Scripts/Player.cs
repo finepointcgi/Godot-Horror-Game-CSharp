@@ -117,13 +117,16 @@ public partial class Player : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		wasInAirLastFrame = !IsOnFloor();
-		Vector3 velocity = getInput();
-		LightValue = LightDetectObject.LightLevel;
+		if (!GameManager.Instance.Paused)
+		{
+			wasInAirLastFrame = !IsOnFloor();
+			Vector3 velocity = getInput();
+			LightValue = LightDetectObject.LightLevel;
 
-		handleSound(getSurface());
-		handleAnimation();
-		handleMovement(velocity, delta);
+			handleSound(getSurface());
+			handleAnimation();
+			handleMovement(velocity, delta);
+		}
 	}
 	/// <summary>
 	/// Handles all the animations the player uses. Based off of state it will run though its varous animations.
@@ -356,13 +359,16 @@ public partial class Player : CharacterBody3D
 	public override void _Input(InputEvent @event)
 	{
 		base._Input(@event);
-		if (@event is InputEventMouseMotion && !inventory.Visible)
+		if (!GameManager.Instance.Paused)
 		{
-			InputEventMouseMotion motion = @event as InputEventMouseMotion;
-			Rotation = new Vector3(Rotation.X, Rotation.Y - motion.Relative.X / 1000 * Sensitivity, Rotation.Z);
-			Camera3D camera = GetNode<Camera3D>("Camera3d");
+			if (@event is InputEventMouseMotion && !inventory.Visible)
+			{
+				InputEventMouseMotion motion = @event as InputEventMouseMotion;
+				Rotation = new Vector3(Rotation.X, Rotation.Y - motion.Relative.X / 1000 * Sensitivity, Rotation.Z);
+				Camera3D camera = GetNode<Camera3D>("Camera3d");
 
-			camera.Rotation = new Vector3(Mathf.Clamp(camera.Rotation.X - motion.Relative.Y / 1000 * Sensitivity, -2, 2), camera.Rotation.Y, camera.Rotation.Z);
+				camera.Rotation = new Vector3(Mathf.Clamp(camera.Rotation.X - motion.Relative.Y / 1000 * Sensitivity, -2, 2), camera.Rotation.Y, camera.Rotation.Z);
+			}
 		}
 	}
 

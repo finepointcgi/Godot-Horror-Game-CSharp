@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://xm2uiw7txgy"]
+
+[ext_resource type="Script" path="res://UI/LoadingScreen.cs" id="1_p3rk3"]
+
+[node name="LoadingScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p3rk3")
+tips = [&"tip1", &"tip2", &"tip3"]
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 54.0
+offset_top = 68.0
+offset_right = 495.0
+offset_bottom = 508.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_top = 74.0
+offset_right = 336.0
+offset_bottom = 213.0
+
+[node name="LoadingLabel" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "Loading..."
+
+[node name="LevelName" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "LevelName"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_top = 284.0
+offset_right = 336.0
+offset_bottom = 423.0
+
+[node name="TipLabel" type="Label" parent="Control/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Tip:"
+
+[node name="TipValue" type="Label" parent="Control/VBoxContainer2"]
+layout_mode = 2
+text = "Tip Here"
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 58.0
+offset_top = -143.0
+offset_right = -77.0
+offset_bottom = -116.0
+grow_horizontal = 2
+grow_vertical = 0

@@ -1,8 +1,8 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=15 format=3 uid="uid://07hix55urpid"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_kdrvw"]
 [ext_resource type="PackedScene" uid="uid://cjmg0hfbgrrm3" path="res://Scenes/LightDetect.tscn" id="2_kmut6"]
-[ext_resource type="PackedScene" path="res://Addons/FP/InventorySystem/Scenes/Inventory.tscn" id="2_ncw6p"]
+[ext_resource type="PackedScene" uid="uid://cwd6lubellow2" path="res://Addons/FP/InventorySystem/Scenes/Inventory.tscn" id="2_ncw6p"]
 [ext_resource type="PackedScene" uid="uid://6r38f2bb202o" path="res://Models/Lantern.blend" id="2_onywc"]
 [ext_resource type="AudioStream" uid="uid://b8odt23skabu" path="res://Sounds/FootstepsOnConcrete.wav" id="4_ui01e"]
 
@@ -314,8 +314,6 @@ script = ExtResource("1_kdrvw")
 
 [node name="Inventory" parent="." instance=ExtResource("2_ncw6p")]
 visible = false
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="MeshInstance3d" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.02048, 0)
@@ -332,6 +330,7 @@ shape = SubResource("CapsuleShape3D_qdxos")
 
 [node name="Camera3d" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.56456, 0)
+current = true
 
 [node name="RayCast3D" type="RayCast3D" parent="Camera3d"]
 target_position = Vector3(0, 0, -1.5)

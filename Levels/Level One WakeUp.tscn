@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bcim6lmamii5j"]
+[gd_scene load_steps=14 format=3 uid="uid://bcim6lmamii5j"]
 
 [ext_resource type="Script" path="res://Levels/LevelOneWakeUp.cs" id="1_glj6v"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/floor.tscn" id="1_hcnn8"]
@@ -8,9 +8,10 @@
 [ext_resource type="PackedScene" path="res://Models/BlockOut/door.tscn" id="4_wjwus"]
 [ext_resource type="PackedScene" path="res://Models/BlockOut/window.tscn" id="5_dl26b"]
 [ext_resource type="PackedScene" uid="uid://caarocqllrphu" path="res://Scenes/Door.tscn" id="6_khf6v"]
-[ext_resource type="PackedScene" path="res://Scenes/player.tscn" id="6_ue3i6"]
+[ext_resource type="PackedScene" uid="uid://cbk1r6b1v5pnj" path="res://LoadLevelDoor.tscn" id="9_nvqbn"]
 [ext_resource type="AudioStream" uid="uid://b6chjryie5jde" path="res://Sounds/366888__marissrar__creepy-ambience.wav" id="10_m2ed6"]
 [ext_resource type="PackedScene" uid="uid://dg5hhtaowot4" path="res://Scenes/grabbable_object.tscn" id="11_pupoq"]
+[ext_resource type="PackedScene" uid="uid://t2sxvk01p5ck" path="res://SpawnIndex.tscn" id="12_kte0w"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8ogg0"]
 size = Vector3(1.36162, 1.82882, 1.77465)
@@ -283,10 +284,11 @@ transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -5.006
 unique_name_in_owner = true
 transform = Transform3D(-3.61999e-06, 0, 1, 0, 1, 0, -1, 0, -3.61999e-06, -1.44445, 1.09711, 2.06095)
 
-[node name="Door3" type="CSGBox3D" parent="Level BSP"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.0142, 1.09711, 3.00172)
-use_collision = true
-size = Vector3(0.12844, 1.99563, 0.891133)
+[node name="LoadLevelDoor" parent="Level BSP" instance=ExtResource("9_nvqbn")]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -6.00778, 1.08139, 3.00389)
+LevelToLoad = "res://Levels/Level 2 Hallway.tscn"
+Index = 1
+TargetIndex = 1
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Level BSP"]
 transform = Transform3D(1.0013, 0, 0, 0, 1.0013, 0, 0, 0, 1.0013, 4.44029, 2.00412, 3.7853)
@@ -319,9 +321,6 @@ light_color = Color(0.619608, 0.705882, 0.819608, 1)
 light_energy = 0.256
 shadow_enabled = true
 
-[node name="Player" parent="." instance=ExtResource("6_ue3i6")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 4.73474, 0.0599114, -6.69089)
-
 [node name="E_ChildroomDoorOpen" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.02525, 0, 3.14472)
 collision_layer = 16
@@ -347,6 +346,9 @@ autoplay = true
 
 [node name="Grabbable Object" parent="." instance=ExtResource("11_pupoq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.40732, 1.17287, -4.94749)
+
+[node name="SpawnIndex" parent="." instance=ExtResource("12_kte0w")]
+transform = Transform3D(-1, 0, 7.46024e-08, 0, 1, 0, -7.46024e-08, 0, -1, 4.94077, 0.0717258, -7.00908)
 
 [connection signal="body_entered" from="E_ChildroomDoorOpen" to="." method="_on_e_childroom_door_open_body_entered"]
 [connection signal="body_entered" from="E_ChildroomSound" to="." method="_on_e_childroom_sound_body_entered"]
