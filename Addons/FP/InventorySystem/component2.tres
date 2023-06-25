@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://c3rukupu8qtjb"]
+
+[ext_resource type="Script" path="res://addons/FPCGI/InventorySystem/Scripts/Item.cs" id="1_wjnf3"]
+
+[sub_resource type="Gradient" id="Gradient_1tpxn"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ulyki"]
+gradient = SubResource("Gradient_1tpxn")
+
+[resource]
+script = ExtResource("1_wjnf3")
+ID = 1
+Name = "test2"
+ResourcePath = ""
+Icon = SubResource("GradientTexture1D_ulyki")
+Quantity = 3
+StackSize = 3
+IsStackable = false
+test = {}

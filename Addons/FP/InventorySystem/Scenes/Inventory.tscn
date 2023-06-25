@@ -1,0 +1,466 @@
+[gd_scene load_steps=14 format=3 uid="uid://c8abe4bskm1w5"]
+
+[ext_resource type="Script" path="res://addons/FPCGI/InventorySystem/Scripts/Inventory.cs" id="1_dtahn"]
+[ext_resource type="Resource" uid="uid://gjb12vide1rk" path="res://addons/FPCGI/InventorySystem/Fireball.tres" id="2_ddtig"]
+[ext_resource type="PackedScene" uid="uid://c2w8g6dj2ke04" path="res://addons/FPCGI/InventorySystem/Scenes/investigation_base_scene.tscn" id="2_l8kob"]
+[ext_resource type="Resource" uid="uid://c3rukupu8qtjb" path="res://addons/FPCGI/InventorySystem/component2.tres" id="3_yca3p"]
+[ext_resource type="Script" path="res://addons/FPCGI/InventorySystem/Scenes/CharacterMenu.cs" id="5_ads8o"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_160op"]
+radius = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ayck"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vn4my"]
+size = Vector2(34, 31)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dlbn3"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="Theme" id="Theme_g2e7c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eibos"]
+bg_color = Color(0.117647, 0.619608, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qxpup"]
+bg_color = Color(0, 0.498039, 0.137255, 1)
+
+[sub_resource type="Theme" id="Theme_3biuo"]
+HScrollBar/styles/scroll = SubResource("StyleBoxFlat_qxpup")
+
+[node name="Inventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_dtahn")
+itemButtonPath = "res://Addons/FPCGI/InventorySystem/Scenes/inventory_button.tscn"
+initialItems = Array[Resource]([ExtResource("2_ddtig"), ExtResource("3_yca3p")])
+
+[node name="MouseArea2d" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseArea2d"]
+shape = SubResource("CircleShape2D_160op")
+
+[node name="InvestigationBaseScene" parent="." instance=ExtResource("2_l8kob")]
+visible = false
+
+[node name="InventoryMenu" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="InventoryMenu"]
+layout_mode = 0
+offset_left = 401.0
+offset_top = 171.0
+offset_right = 624.0
+offset_bottom = 534.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5ayck")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="InventoryMenu/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.5
+offset_top = -148.5
+offset_right = 68.5
+offset_bottom = 161.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="InventoryMenu/Panel/ScrollContainer"]
+layout_mode = 2
+columns = 4
+
+[node name="Trash" type="Button" parent="InventoryMenu/Panel"]
+layout_mode = 0
+offset_left = 182.0
+offset_top = 321.0
+offset_right = 220.0
+offset_bottom = 356.0
+
+[node name="TrashArea2D" type="Area2D" parent="InventoryMenu/Panel/Trash"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InventoryMenu/Panel/Trash/TrashArea2D"]
+position = Vector2(19, 16.5)
+shape = SubResource("RectangleShape2D_vn4my")
+
+[node name="Player Stats" type="Button" parent="InventoryMenu/Panel"]
+layout_mode = 0
+offset_left = 182.0
+offset_top = 29.0
+offset_right = 220.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 9
+text = "Player 
+Stats"
+
+[node name="Player Stats2" type="Button" parent="InventoryMenu/Panel"]
+layout_mode = 0
+offset_left = 182.0
+offset_top = 70.0
+offset_right = 220.0
+offset_bottom = 105.0
+theme_override_font_sizes/font_size = 9
+text = "Craft"
+
+[node name="Panel2" type="Panel" parent="InventoryMenu/Panel"]
+layout_mode = 0
+offset_right = 222.0
+offset_bottom = 28.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="InventoryMenu/Panel/Panel2"]
+layout_mode = 0
+offset_right = 220.0
+offset_bottom = 27.0
+bbcode_enabled = true
+text = "Inventory"
+
+[node name="Button7" type="Button" parent="InventoryMenu/Panel/Panel2"]
+layout_mode = 2
+offset_left = 193.0
+offset_top = 3.0
+offset_right = 217.0
+offset_bottom = 25.0
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "X"
+
+[node name="CharacterMenu" type="Panel" parent="InventoryMenu"]
+visible = false
+layout_mode = 0
+offset_left = 640.0
+offset_top = 171.0
+offset_right = 1048.0
+offset_bottom = 534.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5ayck")
+script = ExtResource("5_ads8o")
+
+[node name="Panel" type="Panel" parent="InventoryMenu/CharacterMenu"]
+layout_mode = 0
+offset_right = 408.0
+offset_bottom = 28.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="InventoryMenu/CharacterMenu/Panel"]
+layout_mode = 0
+offset_right = 408.0
+offset_bottom = 27.0
+bbcode_enabled = true
+text = "Character Stats"
+
+[node name="Button7" type="Button" parent="InventoryMenu/CharacterMenu/Panel"]
+layout_mode = 2
+offset_left = 379.0
+offset_top = 3.0
+offset_right = 403.0
+offset_bottom = 25.0
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "X"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InventoryMenu/CharacterMenu"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 42.0
+offset_right = 396.0
+offset_bottom = 331.0
+theme_override_constants/separation = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryMenu/CharacterMenu/HBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Level"
+
+[node name="Label2" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "HP"
+
+[node name="Label12" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "MP"
+
+[node name="Label13" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "ST"
+
+[node name="Label3" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Attunement"
+
+[node name="Label4" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Endurance"
+
+[node name="Label5" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Vitality"
+
+[node name="Label6" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Strength"
+
+[node name="Label7" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Dexterity"
+
+[node name="Label8" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Intelligence"
+
+[node name="Label9" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Faith"
+
+[node name="Label10" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Luck"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="InventoryMenu/CharacterMenu/HBoxContainer"]
+layout_mode = 2
+
+[node name="Level" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "1"
+
+[node name="HP" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "5"
+
+[node name="MP" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "5"
+
+[node name="ST" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "5"
+
+[node name="Attunement" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "2"
+
+[node name="Endurance" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "3"
+
+[node name="Vitality" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "6"
+
+[node name="Strength" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "3"
+
+[node name="Dexterity" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "3"
+
+[node name="Intelligence" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "4"
+
+[node name="Faith" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "2"
+
+[node name="Luck" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "1"
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="InventoryMenu/CharacterMenu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4"]
+custom_minimum_size = Vector2(200, 2.08165e-12)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel"]
+visible = false
+custom_minimum_size = Vector2(197.872, 2.08165e-12)
+layout_mode = 2
+offset_left = 2.0
+offset_top = 263.0
+offset_right = 199.872
+offset_bottom = 313.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "HP"
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 12
+text = "1000"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(2.08165e-12, 20)
+layout_mode = 2
+size_flags_vertical = 3
+text = "MP"
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(2.08165e-12, 20)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 12
+text = "100"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(2.08165e-12, 20)
+layout_mode = 2
+size_flags_vertical = 3
+text = "ST"
+fit_content = true
+scroll_active = false
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HBoxContainer/VBoxContainer3"]
+custom_minimum_size = Vector2(2.08165e-12, 20)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 12
+text = "100"
+fit_content = true
+scroll_active = false
+
+[node name="HScrollBar" type="HScrollBar" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel"]
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 232.0
+offset_right = 178.0
+offset_bottom = 241.0
+theme_override_styles/scroll = SubResource("StyleBoxFlat_dlbn3")
+value = 70.0
+
+[node name="Label" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HScrollBar"]
+layout_mode = 0
+offset_left = 47.0
+offset_top = -7.0
+offset_right = 87.0
+offset_bottom = 19.0
+text = "1000"
+horizontal_alignment = 1
+
+[node name="HScrollBar2" type="HScrollBar" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel"]
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 249.0
+offset_right = 178.0
+offset_bottom = 258.0
+theme = SubResource("Theme_g2e7c")
+theme_override_styles/scroll = SubResource("StyleBoxFlat_eibos")
+value = 70.0
+
+[node name="Label" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HScrollBar2"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = -7.0
+offset_right = 88.0
+offset_bottom = 19.0
+text = "50"
+horizontal_alignment = 1
+
+[node name="HScrollBar3" type="HScrollBar" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel"]
+visible = false
+layout_mode = 0
+offset_left = 28.0
+offset_top = 267.0
+offset_right = 178.0
+offset_bottom = 276.0
+theme = SubResource("Theme_3biuo")
+value = 70.0
+
+[node name="Label" type="Label" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer4/Panel/HScrollBar3"]
+layout_mode = 0
+offset_left = 49.0
+offset_top = -7.0
+offset_right = 89.0
+offset_bottom = 19.0
+text = "30"
+horizontal_alignment = 1
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="InventoryMenu/CharacterMenu/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button2" type="Button" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button3" type="Button" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button4" type="Button" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button5" type="Button" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button6" type="Button" parent="InventoryMenu/CharacterMenu/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="area_entered" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_entered"]
+[connection signal="area_exited" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_exited"]
+[connection signal="area_entered" from="InventoryMenu/Panel/Trash/TrashArea2D" to="." method="_on_trash_area_2d_area_entered"]
+[connection signal="area_exited" from="InventoryMenu/Panel/Trash/TrashArea2D" to="." method="_on_trash_area_2d_area_exited"]
+[connection signal="button_down" from="InventoryMenu/Panel/Player Stats2" to="." method="_on_player_stats_2_button_down"]

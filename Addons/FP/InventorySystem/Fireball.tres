@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://gjb12vide1rk"]
+
+[ext_resource type="Script" path="res://addons/FPCGI/InventorySystem/Scripts/Item.cs" id="1_gj3rm"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ipham"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_o2dw8"]
+noise = SubResource("FastNoiseLite_ipham")
+
+[resource]
+script = ExtResource("1_gj3rm")
+ID = 0
+Name = "Fireball"
+ResourcePath = ""
+Icon = SubResource("NoiseTexture2D_o2dw8")
+Quantity = 3
+StackSize = 3
+IsStackable = false
+test = {}

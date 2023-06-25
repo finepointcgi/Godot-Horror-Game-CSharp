@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://mdhkpn7kviu3"]
+
+[ext_resource type="Script" path="res://addons/FPCGI/InventorySystem/Scenes/CraftingMenu.cs" id="1_6m5ah"]
+[ext_resource type="Resource" uid="uid://bl34snhnanhig" path="res://addons/FPCGI/InventorySystem/test item.tres" id="2_dsuyv"]
+[ext_resource type="PackedScene" uid="uid://cj4kb5agxltbw" path="res://addons/FPCGI/InventorySystem/Scenes/Crafting_button.tscn" id="3_jeo17"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fsf1k"]
+
+[node name="CraftingMenu" type="Control"]
+process_priority = 4
+layout_mode = 3
+anchors_preset = 0
+offset_left = 87.0
+offset_top = 172.0
+offset_right = 382.0
+offset_bottom = 535.0
+script = ExtResource("1_6m5ah")
+CraftableItems = Array[Resource]([ExtResource("2_dsuyv")])
+craftableButton = ExtResource("3_jeo17")
+
+[node name="Panel2" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fsf1k")
+
+[node name="Panel" type="Panel" parent="Panel2"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 28.0
+grow_horizontal = 2
+
+[node name="Button" type="Button" parent="Panel2/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.0
+offset_top = 1.0
+offset_right = -4.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_font_sizes/font_size = 12
+text = "x"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel2/Panel"]
+layout_mode = 0
+offset_right = 294.0
+offset_bottom = 26.0
+text = "Crafting"
+
+[node name="Control" type="Control" parent="Panel2"]
+anchors_preset = 0
+offset_left = 5.0
+offset_top = 33.0
+offset_right = 290.0
+offset_bottom = 355.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 31.0
+offset_right = -4.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="ScrollContainer"]
+layout_mode = 2
