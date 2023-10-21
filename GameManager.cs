@@ -15,7 +15,9 @@ public partial class GameManager : Node
 
 	public Player Player;
 	public string PlayerScenePath = "res://Scenes/player.tscn";
-    // Called when the node enters the scene tree for the first time.
+    public static Inventory Inventory;
+	
+	// Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
 		if(Instance == null)

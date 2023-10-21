@@ -1,13 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://bcgpist7b5i3v"]
+[gd_scene load_steps=4 format=3 uid="uid://bcgpist7b5i3v"]
 
 [ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/InventoryButton.cs" id="1_dtws2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m84kf"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_urc0r"]
 size = Vector2(38, 38)
 
 [node name="InventoryButton" type="Button"]
-custom_minimum_size = Vector2(40, 40)
+custom_minimum_size = Vector2(40, 80)
+offset_right = 40.0
+offset_bottom = 74.0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_m84kf")
 script = ExtResource("1_dtws2")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 1
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 0
@@ -20,10 +31,18 @@ stretch_mode = 4
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_top = 19.0
+offset_top = 17.0
 offset_right = 40.0
-offset_bottom = 45.0
+offset_bottom = 40.0
 horizontal_alignment = 2
+
+[node name="NameLabel" type="Label" parent="."]
+layout_mode = 0
+offset_top = 41.0
+offset_right = 40.0
+offset_bottom = 64.0
+theme_override_font_sizes/font_size = 10
+autowrap_mode = 2
 
 [node name="Area2D" type="Area2D" parent="."]
 

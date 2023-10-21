@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://goaifmtiscmp"]
+
+[ext_resource type="Texture2D" uid="uid://dr6mu1wgbcq8l" path="res://UI/Icons/Gunpowder.png" id="1_0dr6q"]
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/Item.cs" id="1_kiobr"]
+
+[resource]
+script = ExtResource("1_kiobr")
+ID = 5
+Name = "Gun Poweder"
+ResourcePath = ""
+Icon = ExtResource("1_0dr6q")
+Quantity = 1
+StackSize = 1
+IsStackable = false
+ItemCraftableMakeup = null

@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://bu4fem8ika3i8"]
+
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scenes/ComponentListObject.cs" id="1_77b3f"]
+
+[node name="ComponentListObject" type="HBoxContainer"]
+script = ExtResource("1_77b3f")
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test"
+
+[node name="Amount" type="Label" parent="."]
+layout_mode = 2
+text = "1"

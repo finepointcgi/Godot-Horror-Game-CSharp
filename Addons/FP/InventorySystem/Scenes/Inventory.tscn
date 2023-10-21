@@ -1,17 +1,26 @@
-[gd_scene load_steps=6 format=3 uid="uid://cwd6lubellow2"]
+[gd_scene load_steps=12 format=3 uid="uid://cwd6lubellow2"]
 
 [ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/Inventory.cs" id="1_jktpt"]
 [ext_resource type="PackedScene" uid="uid://c2w8g6dj2ke04" path="res://Addons/FP/InventorySystem/Scenes/investigation_base_scene.tscn" id="2_l8kob"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_160op"]
-radius = 2.0
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scenes/CraftingMenu.cs" id="3_nssej"]
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scenes/CraftableMenuPopup.cs" id="3_y1rlm"]
+[ext_resource type="Resource" uid="uid://c0maouvrqkfnc" path="res://Items/Key.tres" id="4_nryvp"]
+[ext_resource type="PackedScene" uid="uid://bcgpist7b5i3v" path="res://Addons/FP/InventorySystem/Scenes/inventory_button.tscn" id="5_qod8c"]
+[ext_resource type="PackedScene" uid="uid://bu4fem8ika3i8" path="res://ComponentListObject.tscn" id="7_2uotl"]
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scenes/SubViewport.cs" id="8_e58vp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ayck"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vn4my"]
 size = Vector2(34, 31)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_160op"]
+radius = 2.0
+
 [node name="Inventory" type="Control"]
+process_thread_group = 1
+process_thread_group_order = 0
+process_thread_messages = 0
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,11 +30,6 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_jktpt")
 itemButtonPath = "res://Addons/FP/InventorySystem/Scenes/inventory_button.tscn"
-
-[node name="MouseArea2d" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseArea2d"]
-shape = SubResource("CircleShape2D_160op")
 
 [node name="InvestigationBaseScene" parent="." instance=ExtResource("2_l8kob")]
 visible = false
@@ -88,14 +92,15 @@ grow_vertical = 0
 text = "Add Item2"
 
 [node name="RemoveButton2" type="Button" parent="InventoryMenu"]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 698.0
+offset_left = 676.0
 offset_top = 577.0
-offset_right = 818.0
+offset_right = 796.0
 offset_bottom = 608.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -129,11 +134,150 @@ grow_horizontal = 0
 grow_vertical = 0
 text = "Remove Item"
 
-[connection signal="area_entered" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_entered"]
-[connection signal="area_exited" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_exited"]
+[node name="CraftingMenu" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 60.0
+offset_top = 195.0
+offset_right = 250.0
+offset_bottom = 490.0
+script = ExtResource("3_nssej")
+CraftableItems = Array[Resource]([ExtResource("4_nryvp")])
+CraftableButton = ExtResource("5_qod8c")
+
+[node name="Panel" type="Panel" parent="CraftingMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CraftingMenu"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -1.0
+offset_top = 2.0
+offset_right = -1.0
+offset_bottom = 28.0
+grow_horizontal = 2
+text = "Crafting Menu"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CraftingMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="CraftingMenu/ScrollContainer"]
+layout_mode = 2
+columns = 4
+
+[node name="Button" type="Button" parent="CraftingMenu"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -29.0
+offset_bottom = 22.0
+grow_horizontal = 0
+text = "X"
+
+[node name="MouseArea2d" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MouseArea2d"]
+shape = SubResource("CircleShape2D_160op")
+
+[node name="InventoryButton" parent="MouseArea2d" instance=ExtResource("5_qod8c")]
+visible = false
+z_index = 1
+offset_bottom = 80.0
+
+[node name="CraftableMenuPopup" type="Control" parent="MouseArea2d"]
+visible = false
+z_index = 2
+layout_mode = 3
+anchors_preset = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 157.0
+offset_bottom = 158.0
+script = ExtResource("3_y1rlm")
+componentListObject = ExtResource("7_2uotl")
+
+[node name="Panel" type="Panel" parent="MouseArea2d/CraftableMenuPopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ItemName" type="Label" parent="MouseArea2d/CraftableMenuPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 26.0
+grow_horizontal = 2
+text = "HeaderLabel"
+horizontal_alignment = 1
+
+[node name="WeightLabel" type="Label" parent="MouseArea2d/CraftableMenuPopup"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 27.0
+offset_right = -76.0
+offset_bottom = 53.0
+grow_horizontal = 2
+text = "Weight"
+
+[node name="Components Label" type="Label" parent="MouseArea2d/CraftableMenuPopup"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 30.0
+offset_right = -2.0
+offset_bottom = 56.0
+grow_horizontal = 2
+text = "Components"
+horizontal_alignment = 1
+
+[node name="WeightValue" type="Label" parent="MouseArea2d/CraftableMenuPopup"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 74.0
+offset_top = 27.0
+offset_right = -2.0
+offset_bottom = 53.0
+grow_horizontal = 2
+text = "0"
+horizontal_alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MouseArea2d/CraftableMenuPopup"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 60.0
+offset_right = 146.0
+offset_bottom = 150.0
+
+[node name="SubViewport" type="SubViewport" parent="."]
+script = ExtResource("8_e58vp")
+
 [connection signal="area_entered" from="InventoryMenu/Panel/Trash/TrashArea2D" to="." method="_on_trash_area_2d_area_entered"]
 [connection signal="area_exited" from="InventoryMenu/Panel/Trash/TrashArea2D" to="." method="_on_trash_area_2d_area_exited"]
 [connection signal="button_down" from="InventoryMenu/AddButton2" to="." method="_on_add_button_2_button_down"]
 [connection signal="button_down" from="InventoryMenu/RemoveButton2" to="." method="_on_remove_button_2_button_down"]
 [connection signal="button_down" from="InventoryMenu/AddButton" to="." method="_on_add_button_button_down"]
 [connection signal="button_down" from="InventoryMenu/RemoveButton" to="." method="_on_remove_button_button_down"]
+[connection signal="area_entered" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_entered"]
+[connection signal="area_exited" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_exited"]

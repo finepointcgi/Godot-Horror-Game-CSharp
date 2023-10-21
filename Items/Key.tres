@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://c0maouvrqkfnc"]
+
+[ext_resource type="Texture2D" uid="uid://dqoks837bsl8e" path="res://UI/Icons/Key.png" id="1_3664s"]
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/Item.cs" id="1_qwamk"]
+[ext_resource type="Resource" uid="uid://dicjy3aduwnhh" path="res://Items/Iron.tres" id="2_thngg"]
+[ext_resource type="Resource" uid="uid://goaifmtiscmp" path="res://Items/GunPowder.tres" id="3_eg678"]
+
+[resource]
+script = ExtResource("1_qwamk")
+ID = 7
+Name = "Key"
+ResourcePath = ""
+Icon = ExtResource("1_3664s")
+Quantity = 1
+StackSize = 1
+IsStackable = false
+ItemCraftableMakeup = {
+ExtResource("2_thngg"): 1,
+ExtResource("3_eg678"): 1
+}

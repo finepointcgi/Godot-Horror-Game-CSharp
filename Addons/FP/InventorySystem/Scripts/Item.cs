@@ -21,6 +21,8 @@ public partial class Item : Resource
     public Item SubItem { get; set; }
     [Export]
     public Item BaseItem {get; set;}
+    [Export]
+    public Godot.Collections.Dictionary<Resource, int> ItemCraftableMakeup; //items and cost
 
     public Item Copy() => MemberwiseClone() as Item;
 
@@ -29,4 +31,32 @@ public partial class Item : Resource
         GD.Print("Used Item!");
     }
 
+    public bool CanCraftItem(){
+        int countOfAffordedItems = 0;
+        foreach (var item in ItemCraftableMakeup)
+        {
+            if(GameManager.Inventory.CanAfford((Item)item.Key, item.Value)){
+                countOfAffordedItems ++;
+            }
+        }
+
+        if(countOfAffordedItems >= ItemCraftableMakeup.Count){
+            return true;
+        }
+        return false;
+    }
+
+    public void CraftItem(){
+        if(CanCraftItem()){
+            foreach (var item in ItemCraftableMakeup)
+            {
+                bool success = GameManager.Inventory.Remove((Item)item.Key, item.Value);
+                if(!success){
+                    GD.Print("Failed To Remove " + item.Key.ResourceName);
+                    return;
+                }
+            }
+            GameManager.Inventory.Add(this);
+        }
+    }
 }

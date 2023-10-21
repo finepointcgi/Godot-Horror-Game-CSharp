@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dicjy3aduwnhh"]
+
+[ext_resource type="Texture2D" uid="uid://bxhc2tqw7xsl0" path="res://UI/Icons/Iron.png" id="1_7qhlw"]
+[ext_resource type="Script" path="res://Addons/FP/InventorySystem/Scripts/Item.cs" id="2_552be"]
+
+[resource]
+script = ExtResource("2_552be")
+ID = 6
+Name = "Iron"
+ResourcePath = ""
+Icon = ExtResource("1_7qhlw")
+Quantity = 1
+StackSize = 1
+IsStackable = false
+ItemCraftableMakeup = null
