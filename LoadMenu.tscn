@@ -1,0 +1,97 @@
+[gd_scene load_steps=4 format=3 uid="uid://dtnofmgct51vc"]
+
+[ext_resource type="Script" path="res://LoadMenu.cs" id="1_g2ocf"]
+[ext_resource type="PackedScene" uid="uid://clgy0n6gw56d7" path="res://LoadButton.tscn" id="2_bi7hs"]
+[ext_resource type="Texture2D" uid="uid://cf56c2s4lu3dh" path="res://icon.svg" id="2_on5cq"]
+
+[node name="LoadMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g2ocf")
+LoadButton = ExtResource("2_bi7hs")
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 571.0
+offset_right = 210.0
+offset_bottom = 616.0
+text = "Back"
+
+[node name="Load" type="Button" parent="."]
+layout_mode = 0
+offset_left = 933.0
+offset_top = 571.0
+offset_right = 1098.0
+offset_bottom = 616.0
+text = "Load"
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 71.0
+offset_right = 394.0
+offset_bottom = 532.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 45.0
+offset_right = 384.0
+offset_bottom = 69.0
+text = "Saves:"
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 46.0
+grow_horizontal = 2
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "[center]Load Game[/center]"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 464.0
+offset_top = 82.0
+offset_right = 1115.0
+offset_bottom = 404.0
+texture = ExtResource("2_on5cq")
+expand_mode = 2
+stretch_mode = 4
+
+[node name="SaveName" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 498.0
+offset_top = 425.0
+offset_right = 756.0
+offset_bottom = 465.0
+text = "Save Name"
+
+[node name="SaveDate" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 498.0
+offset_top = 483.0
+offset_right = 756.0
+offset_bottom = 523.0
+text = "Save Date"
+
+[connection signal="button_down" from="Back" to="." method="_on_back_button_down"]
+[connection signal="button_down" from="Load" to="." method="_on_load_button_down"]

@@ -19,7 +19,7 @@ public partial class LightDetect : Node3D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		Image image = GetNode<SubViewport>("SubViewportContainer/SubViewport").GetTexture().GetImage();
+		Image image = GetNode<Godot.SubViewport>("SubViewportContainer/SubViewport").GetTexture().GetImage();
 		List<float> lightnessList = new List<float>();
 		for (int y = 0; y < image.GetHeight(); y++)
 		{

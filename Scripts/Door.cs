@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GodotHorrorGameCSharp.Scripts
 {
-    public partial class Door : Node3D, Interactable
+    public partial class Door : Node3D, Interactable, Saveable
     {
         [Export]
         public string HoverOverText;
@@ -36,5 +36,24 @@ namespace GodotHorrorGameCSharp.Scripts
                 player.Play("Open");
             DoorOpen = !DoorOpen;
         }
+
+       public Dictionary<string,string> Save()
+    {
+        return new Dictionary<string,string>(){
+			{"name", GetPath()},
+			{"position", GD.VarToStr(GlobalPosition)},
+			{"rotation", GD.VarToStr(GlobalRotationDegrees)},
+			{"DoorOpen", GD.VarToStr(DoorOpen)}
+		};
+    }
+
+    public void Load(Dictionary<string,string> data)
+    {
+        GlobalPosition = (Vector3)GD.StrToVar(data["position"]);
+        GlobalRotationDegrees = (Vector3)GD.StrToVar(data["rotation"]);
+	    DoorOpen = (bool)GD.StrToVar(data["DoorOpen"]);
+
+    }
+
     }
 }

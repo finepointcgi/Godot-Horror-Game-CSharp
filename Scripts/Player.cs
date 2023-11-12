@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using Godot;
 using GodotHorrorGameCSharp.Scripts;
 
 /// <summary>
 /// The main player class
 /// </summary>
-public partial class Player : CharacterBody3D
+public partial class Player : CharacterBody3D, Saveable
 {
 	/// <summary>
 	/// The states that are open to the player to use.
@@ -112,7 +113,7 @@ public partial class Player : CharacterBody3D
 		camera = GetNode<Camera3D>("Camera3d");
         headRaycast = camera.GetNode<RayCast3D>("RayCast3D");
 		grabbedJoint = camera.GetNode<Generic6DofJoint3D>("Generic6DOFJoint3D");
-		inventory = GetNode<Inventory>("Inventory");
+		inventory = GameManager.Instance.UIBase.GetNode<Inventory>("Inventory");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -313,6 +314,10 @@ public partial class Player : CharacterBody3D
 			}
 		}
 
+		if(Input.IsActionJustPressed("Pause")){
+			GameManager.Instance.PauseGame(!GameManager.Instance.Paused);
+		}
+
 		return direction;
 	}
 	/// <summary>
@@ -392,5 +397,24 @@ public partial class Player : CharacterBody3D
 			grabbedJoint.NodeB = grabbedJoint.GetNode<StaticBody3D>("ResetBody").GetPath();
 		}
 	}
+
+   	public Dictionary<string,string> Save()
+    {
+        return new Dictionary<string,string>(){
+			{"name", GetPath()},
+			{"position", GD.VarToStr(GlobalPosition)},
+			{"rotation", GD.VarToStr(GlobalRotationDegrees)},
+			{"crouched", GD.VarToStr(IsCrouched)},
+		};
+    }
+
+    public void Load(Dictionary<string,string> data)
+    {
+        GlobalPosition = (Vector3)GD.StrToVar(data["position"]);
+        GlobalRotationDegrees = (Vector3)GD.StrToVar(data["rotation"]);
+		IsCrouched = (bool)GD.StrToVar(data["crouched"]);
+		
+    }
+
 }
 

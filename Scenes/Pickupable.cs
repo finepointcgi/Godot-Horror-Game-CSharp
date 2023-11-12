@@ -1,8 +1,9 @@
 using Godot;
 using GodotHorrorGameCSharp.Scripts;
 using System;
+using System.Collections.Generic;
 
-public partial class Pickupable : RigidBody3D, Interactable
+public partial class Pickupable : RigidBody3D, Interactable, Saveable
 {
 	[Export]
 	public string HoverOverText;
@@ -17,7 +18,7 @@ public partial class Pickupable : RigidBody3D, Interactable
 	{
 		BodyEntered += Pickupable_BodyEntered;
 		audioStreamPlayer3D = GetNode<AudioStreamPlayer3D>("AudioStreamPlayer3D");
-
+		
     }
 
 	private void Pickupable_BodyEntered(Node body)
@@ -55,4 +56,21 @@ public partial class Pickupable : RigidBody3D, Interactable
 	{
 		return noiseValue;
 	}
+
+    public Dictionary<string,string> Save()
+    {
+        return new Dictionary<string,string>(){
+			{"name", GetPath()},
+			{"position", GD.VarToStr(GlobalPosition)},
+			{"rotation", GD.VarToStr(GlobalRotationDegrees)}
+		};
+    }
+
+    public void Load(Dictionary<string,string> data)
+    {
+        GlobalPosition = (Vector3)GD.StrToVar(data["position"]);
+        GlobalRotationDegrees = (Vector3)GD.StrToVar(data["rotation"]);
+		
+    }
+
 }

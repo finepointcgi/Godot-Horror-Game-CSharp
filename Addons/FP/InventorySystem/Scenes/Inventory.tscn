@@ -135,6 +135,7 @@ grow_vertical = 0
 text = "Remove Item"
 
 [node name="CraftingMenu" type="Control" parent="."]
+visible = false
 anchors_preset = 0
 offset_left = 60.0
 offset_top = 195.0
@@ -273,6 +274,14 @@ offset_bottom = 150.0
 [node name="SubViewport" type="SubViewport" parent="."]
 script = ExtResource("8_e58vp")
 
+[node name="SaveGame" type="Button" parent="."]
+layout_mode = 0
+offset_left = 1016.0
+offset_top = 7.0
+offset_right = 1143.0
+offset_bottom = 56.0
+text = "Save Game"
+
 [connection signal="area_entered" from="InventoryMenu/Panel/Trash/TrashArea2D" to="." method="_on_trash_area_2d_area_entered"]
 [connection signal="area_exited" from="InventoryMenu/Panel/Trash/TrashArea2D" to="." method="_on_trash_area_2d_area_exited"]
 [connection signal="button_down" from="InventoryMenu/AddButton2" to="." method="_on_add_button_2_button_down"]
@@ -281,3 +290,4 @@ script = ExtResource("8_e58vp")
 [connection signal="button_down" from="InventoryMenu/RemoveButton" to="." method="_on_remove_button_button_down"]
 [connection signal="area_entered" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_entered"]
 [connection signal="area_exited" from="MouseArea2d" to="." method="_on_mouse_area_2d_area_exited"]
+[connection signal="button_down" from="SaveGame" to="." method="_on_save_game_button_down"]

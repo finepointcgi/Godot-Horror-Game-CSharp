@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
-
+[GlobalClass]
 public partial class Inventory : Control
 {
     public enum States
@@ -300,5 +300,12 @@ public partial class Inventory : Control
     public void _on_remove_button_2_button_down()
     {
         Remove(ResourceLoader.Load<Item>("res://Items/GunPowder.tres"));
+    }
+
+    public void _on_save_game_button_down(){
+        string date = Time.GetDatetimeStringFromSystem().ToString();
+        date = date.Replace(":", "-");
+        date = date.Replace("/", "-");
+        SaveLoadManager.SaveGame("test " + date);
     }
 }

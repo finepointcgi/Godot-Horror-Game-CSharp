@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://clgy0n6gw56d7"]
+
+[ext_resource type="Script" path="res://LoadButton.cs" id="1_cjlmk"]
+
+[node name="LoadButton" type="Button"]
+text = "Save 1"
+script = ExtResource("1_cjlmk")
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]

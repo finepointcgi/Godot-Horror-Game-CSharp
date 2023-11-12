@@ -12,10 +12,16 @@ public partial class GameManager : Node
 	public bool Paused;
 
 	public Node LevelBase;
+	public UIBase UIBase;
 
 	public Player Player;
 	public string PlayerScenePath = "res://Scenes/player.tscn";
     public static Inventory Inventory;
+
+	public string LoadedLevel;
+	public int LoadedLevelIndex;
+	public bool LoadingFromSave;
+
 	
 	// Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -32,6 +38,8 @@ public partial class GameManager : Node
 
 	public void LoadLevel(string path, int index)
 	{
+		LoadedLevel = path;
+		LoadedLevelIndex = index;
 		PackedScene loadScene = ResourceLoader.Load<PackedScene>(LoadScene);
 		LoadingScreen loadSceneNode = loadScene.Instantiate() as LoadingScreen;
 		LevelBase.AddChild(loadSceneNode);
@@ -66,5 +74,15 @@ public partial class GameManager : Node
 		}
 
 	}
-	
+
+
+	public void PauseGame(bool paused){
+		Paused = paused;
+		if(paused){
+			Input.MouseMode = Input.MouseModeEnum.Visible;
+		}else{
+			Input.MouseMode = Input.MouseModeEnum.Captured;
+		}
+		UIBase.Pause(paused);
+	}
 }

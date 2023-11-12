@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bc4ats0wyh42r"]
+[gd_scene load_steps=4 format=3 uid="uid://bc4ats0wyh42r"]
 
 [ext_resource type="Script" path="res://UI/MainMenu.cs" id="1_qs1bp"]
 [ext_resource type="PackedScene" uid="uid://xm2uiw7txgy" path="res://UI/LoadingScreen.tscn" id="2_8wj8p"]
+[ext_resource type="PackedScene" uid="uid://dtnofmgct51vc" path="res://LoadMenu.tscn" id="3_djq40"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -25,4 +26,17 @@ text = "Start Game
 visible = false
 layout_mode = 1
 
+[node name="Load Game" type="Button" parent="."]
+layout_mode = 0
+offset_left = 103.0
+offset_top = 215.0
+offset_right = 306.0
+offset_bottom = 265.0
+text = "Load Game"
+
+[node name="LoadMenu" parent="." instance=ExtResource("3_djq40")]
+visible = false
+layout_mode = 1
+
 [connection signal="button_down" from="StartGame" to="." method="_on_start_game_button_down"]
+[connection signal="button_down" from="Load Game" to="." method="_on_load_game_button_down"]

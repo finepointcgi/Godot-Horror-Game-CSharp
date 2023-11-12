@@ -1,13 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://c6puk4g8odluy"]
+[gd_scene load_steps=6 format=3 uid="uid://c6puk4g8odluy"]
 
 [ext_resource type="Script" path="res://LevelBase.cs" id="1_l11r2"]
 [ext_resource type="PackedScene" uid="uid://bc4ats0wyh42r" path="res://UI/MainMenu.tscn" id="2_2kokf"]
+[ext_resource type="Script" path="res://UIBase.cs" id="2_vohlm"]
+[ext_resource type="PackedScene" uid="uid://c3k304hh8id5j" path="res://PauseMenu.tscn" id="3_7e2fg"]
+[ext_resource type="PackedScene" uid="uid://cwd6lubellow2" path="res://Addons/FP/InventorySystem/Scenes/Inventory.tscn" id="3_fpckr"]
 
 [node name="GameBase" type="Node"]
 
 [node name="LevelBase" type="Node" parent="."]
 script = ExtResource("1_l11r2")
 
-[node name="MainMenu" parent="LevelBase" instance=ExtResource("2_2kokf")]
-
 [node name="PlayerBase" type="Node" parent="." groups=["PlayerBase"]]
+
+[node name="UI Base" type="Node" parent="."]
+script = ExtResource("2_vohlm")
+PauseMenu = ExtResource("3_7e2fg")
+
+[node name="MainMenu" parent="UI Base" instance=ExtResource("2_2kokf")]
+
+[node name="Inventory" parent="UI Base" instance=ExtResource("3_fpckr")]
+visible = false

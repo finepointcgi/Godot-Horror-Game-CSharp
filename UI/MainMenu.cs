@@ -6,19 +6,34 @@ public partial class MainMenu : Control
 	[Export]
 	public string MainMenuFirstLevelLoad = "res://Levels/Level One WakeUp.tscn";
 
+	[Export]
+	public PackedScene LoadMenu;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
+		GetNode<LoadMenu>("LoadMenu").LoadingLevel += OnLoadingLevel;
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+    private void OnLoadingLevel()
+    {
+        QueueFree();
+    }
+
+    // Called every frame. 'delta' is the elapsed time since the previous frame.
+    public override void _Process(double delta)
 	{
 	}
 
 	private void _on_start_game_button_down()
 	{
 		GetNode<Button>("StartGame").Hide();
-		GetNode<LoadingScreen>("LoadingScreen").LoadLevel(MainMenuFirstLevelLoad, 0);
+		GameManager.Instance.LoadLevel(MainMenuFirstLevelLoad, 0);
+		QueueFree();
+	}
+
+	private void _on_load_game_button_down(){
+		GetNode<Control>("LoadMenu").Show();
+
 	}
 }

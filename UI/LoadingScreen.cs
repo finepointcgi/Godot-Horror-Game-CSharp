@@ -87,7 +87,11 @@ public partial class LoadingScreen : Control
         Node currentNode = resource.Instantiate();
         GameManager.Instance.LevelBase.AddChild(currentNode);
 		GameManager.Instance.CheckForPlayer();
-		GameManager.Instance.MovePlayer(index);
+
+		if(!GameManager.Instance.LoadingFromSave)
+			GameManager.Instance.MovePlayer(index);
+
+		GameManager.Instance.LoadingFromSave = false;
         GameManager.Instance.Paused = false;
         QueueFree();
 	}
