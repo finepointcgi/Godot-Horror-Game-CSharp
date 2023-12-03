@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Godot Horror Game CSharp"
-run/main_scene="res://UI/MainMenu.tscn"
-config/features=PackedStringArray("4.1", "C#", "Forward Plus")
+run/main_scene="res://GameBase.tscn"
+config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]

@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://xm2uiw7txgy" path="res://UI/LoadingScreen.tscn" id="2_8wj8p"]
 [ext_resource type="PackedScene" uid="uid://dtnofmgct51vc" path="res://LoadMenu.tscn" id="3_djq40"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" node_paths=PackedStringArray("LoadMenu")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,6 +12,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_qs1bp")
+LoadMenu = NodePath("LoadMenu")
 
 [node name="StartGame" type="Button" parent="."]
 layout_mode = 0

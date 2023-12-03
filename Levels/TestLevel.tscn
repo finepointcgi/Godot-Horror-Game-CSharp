@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cdkaq35af3jx0"]
 
-[ext_resource type="PackedScene" uid="uid://c3i8poarpae43" path="res://Scenes/player.tscn" id="1_m4lvg"]
+[ext_resource type="PackedScene" uid="uid://07hix55urpid" path="res://Scenes/player.tscn" id="1_m4lvg"]
 [ext_resource type="PackedScene" uid="uid://dh0vsid6gfbvy" path="res://Scenes/Enemy.tscn" id="2_6syrt"]
 [ext_resource type="Script" path="res://Scripts/Surface.cs" id="3_o2b5v"]
 [ext_resource type="Resource" uid="uid://b4pswmuw0xa5s" path="res://Sounds/Concrete.tres" id="4_fci2h"]
@@ -20,7 +20,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.189473, 0)
 
 [node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0104218, 0.0260086, 0.00114202)
-navmesh = SubResource("NavigationMesh_0kjur")
+navigation_mesh = SubResource("NavigationMesh_0kjur")
 
 [node name="CsgBox3d" type="CSGBox3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0104218, -0.0260086, -0.00114202)
