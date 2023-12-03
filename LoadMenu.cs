@@ -11,13 +11,16 @@ public partial class LoadMenu : Control
 
 	private string saveToLoad;
 
-	[Signal]
-	public delegate void LoadingLevelEventHandler();
+	public event EventHandler LoadingLevel;
 
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		DirAccess baseDir = DirAccess.Open("user://");
+		if (!baseDir.DirExists("SavedGames"))
+			baseDir.MakeDir("SavedGames");
+		
 		string[] dirs = DirAccess.GetDirectoriesAt("user://SavedGames");
 		foreach (var dir in dirs)
 		{
@@ -70,7 +73,7 @@ public partial class LoadMenu : Control
 		var obj = SaveLoadManager.LoadGame(saveToLoad);
 		GameManager.Instance.LoadLevel(obj["LoadedLevel"], int.Parse(obj["SpawnIndex"]));
 
-		EmitSignal(SignalName.LoadingLevel);
+		LoadingLevel?.Invoke(this, EventArgs.Empty);
 		GameManager.Instance.PauseGame(false);
 		QueueFree();
 	}
