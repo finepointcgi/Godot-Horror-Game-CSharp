@@ -157,11 +157,12 @@ public partial class Inventory : Control
             if (items[i].ID == currentItem.ID && items[i].Quantity != items[i].StackSize)
             {
                 if (items[i].Quantity + currentItem.Quantity > items[i].StackSize)
-                {
-                    items[i].Quantity = currentItem.StackSize;
-                    currentItem.Quantity = -(currentItem.Quantity - items[i].StackSize);
-                    UpdateButton(i);
-                }
+				{
+					int remainingSpace = items[i].StackSize - items[i].Quantity;
+					items[i].Quantity = items[i].StackSize;
+					currentItem.Quantity -= remainingSpace;
+					UpdateButton(i);
+				}
                 else
                 {
                     items[i].Quantity += currentItem.Quantity;
